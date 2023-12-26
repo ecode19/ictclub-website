@@ -1,0 +1,22 @@
+<nav class="navbar navbar-expand-lg navbar-dark shadow-lg sticky-top" style="background-color: #19c357; color:black;">
+    <div class="container">
+        <a href="{{ route('user') }}" class="navbar-brand text-warning"><img
+                class="img-fluid ms-auto rounded-circle d-none d-sm-block" src="../img/logo.jpg"
+                style="width: 100px; heig"></a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navmenu">
+            Menu<span class="navbar-toggler-ico"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navmenu">
+            <ul class="navbar-nav fs-6 mx-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ route('user') }}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('membershipCard') }}">Membership Card</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('event') }}">Events</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('announcement') }}">Announcements</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('resourcesView') }}">Resources</a></li>
+                <li class="nav-item"><a class="nav-link" href="404.php">Discussion Forum</a></li>
+            </ul>
+            <a href="{{ route('logout') }}" class="text-decoration-none fw-bold favcolor">Logout</a>
+
+        </div>
+    </div>
+</nav>
