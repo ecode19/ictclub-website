@@ -98,7 +98,6 @@
                             <th>FULLNAME</th>
                             <th>Course</th>
                             <th>Mark as Paid</th>
-                            <th>Usertype</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -111,7 +110,6 @@
                                     <td>{{ $members->fullname }}</td>
                                     <td>{{ $members->course }}</td>
                                     <td>{{ $members->payment_status }}</td>
-                                    <td>{{ $members->usertype }}</td>
                                     {{-- <td>{{ $members->created_at }}</td> --}}
                                     <td><a class="btn btn-warning"
                                             href="{{ route('update', ['id' => $members->id]) }}">Edit</a>
