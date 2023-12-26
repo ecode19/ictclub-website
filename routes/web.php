@@ -26,7 +26,7 @@ Route::get('/showLoginForm', [App\Http\ControlleshowLoginFormController::class, 
 
 // Defining Admin Routes
 Route::controller(AdminController::class)->prefix('admin')->middleware('admin')->group(function(){
-Route::get('Dashboard', 'Dashboard')->name('Dashboard');
+Route::get('AdminDashboard', 'Dashboard')->name('AdminDashboard');
 Route::get('post_page', 'post')->name('post_event');
 Route::get('add_Member','addMember')->name('add_Member');
 Route::get('resource_repository','Repository')->name('resource_repository');
@@ -37,10 +37,22 @@ Route::get('update/{id}','update')->name('update');
 Route::put('edit/{id}','edit')->name('edit');
     });
 
+
+
     // Defining user Routes
-Route::controller(UserController::class)->prefix('user')->middleware('user')->group(function(){
+Route::controller(UserController::class)->prefix('user')->middleware(['user', 'payment'])->group(function(){
 Route::get('Dashboard', 'Dashboard')->name('Dashboard');
+    Route::get('event', 'event')->name('event');
+    Route::get('membershipCard', 'membershipCard')->name('membershipCard');
+    Route::get('announcement', 'announcement')->name('announcement');
+    Route::get('resourcesView', 'resourcesView')->name('resourcesView');
+    Route::get('accessDenied', 'accessDenied')->name('accessDenied');
     });
+
+// Defining user Routes
+Route::controller(UserController::class)->prefix('user')->group(function(){
+    Route::get('accessDenied', 'accessDenied')->name('accessDenied');
+});
 
 // Route::get('admin', function () {
 //     return view('admin');

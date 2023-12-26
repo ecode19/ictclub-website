@@ -61,7 +61,7 @@ body {
 }
 
 .navbar {
-	border-bottom: px solid orange;
+	border-bottom: 2px solid orange;
 	font-family: 'lato', sans-serif;
 	color: orange;
 }
@@ -73,8 +73,6 @@ body {
 	letter-spacing: max(12, 10);
 	letter-spacing: min(12, 10);
 }
-
-h1,
 h2,
 h5 {
 	color: whitesmoke;

@@ -17,8 +17,27 @@
         @include('users.usernav') --}}
     @include('admin.adminNav')
     <main>
-        @include('admin.message')
-        @extends('layouts.app')
+        <div class="container">
+        <div class="mt-5">
+            @if (session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session('message') }}
+                </div>
+            @endif
+        </div>
+        <div class="mb-3">
+            @if (session()->has('fail'))
+                <span class="alert alert-danger p-3 mt-5">
+                            {{ session('fail') }}
+                        </span>
+            @endif
+        </div>
+
+
+{{--        @extends('layouts.app')--}}
+
+
+
         <div class="container">
             <div class="dropdown text-end mt-3">
                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -27,9 +46,10 @@
                 <ul class="dropdown-menu bg-secondary">
                     <li><a class="dropdown-item" href="teachers.php">Profile</a></li>
                     <li><a class="dropdown-item" href="#"></a></li>
-                    {{ Auth::user()->name }}
+                    {{ Auth::user()->fullname }}
                 </ul>
             </div>
+        </div>
             <div class="row">
                 <div class="mt-3">
                 </div>
@@ -82,7 +102,7 @@
                             <div class="text-dark text-center">
                                 <i class="fas fa-signal text-primary fa-2x" aria-hidden="true"></i>
                                 <div class="fs-3 fw-bold">{{ $inactiveMembers }}</div>
-                                <p class="text-dark">Inactive Menbers</p>
+                                <p class="text-dark">Inactive Members</p>
                             </div>
                         </div>
                     </div>
@@ -95,7 +115,7 @@
                     <thead>
                         <tr>
                             <th>RegNo</th>
-                            <th>FULLNAME</th>
+                            <th>FULL NAME</th>
                             <th>Course</th>
                             <th>Mark as Paid</th>
                             <th>Action</th>
@@ -142,3 +162,5 @@
 </body>
 
 </html>
+
+

@@ -35,7 +35,8 @@
                     <div class="col-12 col-md-12 col-lg-6 mb-3">
                         <label for="name" class="fw-bold">COURSE</label>
                         <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                            name="course" value="{{ $members->course }}" aria-placeholder="">
+                            name="course">
+                            <option value="{{ $members->course }}">{{ $members->course }}</option>
                             <option value="BAGEN">BAGEN</option>
                             <option value="BScCS">BScCS</option>
                             <option value="Biology ICT">Biology ICT</option>
@@ -53,7 +54,8 @@
                     <div class="col-12 col-md-12 col-lg-6 mb-3">
                         <label for="name" class="fw-bold form-label">CATEGORY</label>
                         <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                            name="category" value="{{ $members->category }}">
+                            name="category">
+                            <option value="{{ $members->category }}">{{ $members->category }}</option>
                             <option value="Graphics Designing">Graphics Designing</option>
                             <option value="Programming">Programming</option>
                             <option value="Cyber Security">Cyber Security</option>
@@ -71,15 +73,15 @@
                         <label for="name" class="fw-bold form-label">PAYMENT STATUS</label>
                         <select class="form-select form-select-lg" aria-label=".form-select-lg example"
                             name="payment_status">
-                            <option value="">{{ $members->payment_status }}</option>
-                            <option value="Graphics Designing">1</option>
-                            <option value="Programming">0</option>
+                            <option value="{{ $members->payment_status }}">{{ $members->payment_status }}</option>
+                            <option value="active">active</option>
+                            <option value="inactive">inactive</option>
                         </select>
-                        {{-- <span class="text-danger">
+                         <span class="text-danger">
                             @error('category')
                                 {{ $message }}
                             @enderror
-                        </span> --}}
+                        </span>
                     </div>
                 </div>
                 <button type="submit" name="update" class="btn btn-warning text-dark fw-bold">Update</button>

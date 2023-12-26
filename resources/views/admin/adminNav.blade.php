@@ -68,7 +68,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark shadow sticky-top" style="background-color:#19c357;">
         <div class="container">
-            <a href="{{ route('Dashboard') }}" class="navbar-brand fw-bolder text-light fs-3">MWECAU ICT CLUB SYSTEM
+            <a href="{{ route('AdminDashboard') }}" class="navbar-brand fw-bolder text-light fs-3">MWECAU ICT CLUB SYSTEM
                 (MICs)</a>
             <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
                 aria-controls="offcanvasExample">
@@ -113,16 +113,23 @@
                         Tracking</button></a>
                 <a href=""><button class="f btn btn-dark mt-3"><i class="fas fa-feedback"></i> Feedback
                         & Support</button></a>
-                <a href=""><button class="f btn btn-dark mt-3"> show resources</button></a>
+                <a href=""><button class="f btn btn-dark mt-3"> show resources</button></a> <br>
 
+{{--    laravel default login script--}}
+                <a  href="{{ route('logout') }}" class="text-decoration-none fw-bold text-warning " onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <button class="btn btn-brand btn-primary btn-sm mt-2"> <i class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+                </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
             </div>
-            <a href="{{ route('logout') }}" class="text-decoration-none fw-bold text-light"> <i class="fa fa-sign-out"
-                    aria-hidden="true"></i> Logout</a>
+
         </div>
     </section>
-    <section class="table">
+{{--    <section class="table">--}}
 
-    </section>
+{{--    </section>--}}
     <!--bootstrap javascrip-->
     <!--bootstrap javascrip-->
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.js') }}"></script>

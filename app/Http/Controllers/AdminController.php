@@ -17,7 +17,7 @@ class AdminController extends Controller
     $activeMembers = user::where('payment_status', 'active')->count(); // fetching all active members
     $inactiveMembers = user::where('payment_status', 'inactive')->count(); //fetching all inactive members
     $members = User::all();
-        return view ('admin/Dashboard', compact('adminName', 'allMembers', 'activeMembers', 'inactiveMembers','members'));
+        return view ('admin/AdminDashboard', compact('adminName', 'allMembers', 'activeMembers', 'inactiveMembers','members'));
     }
     public function post(){
 
@@ -58,15 +58,16 @@ class AdminController extends Controller
         return view ('admin.update', compact('members'));
     }
 
-    public function edit(){
+    public function edit(Request $request, $id){
 
-        $members = User::find($id);
+        $member = User::find($id);
 
-    // Use $request instead of $request::all()
-    $members->update($request->all());
-    $members->save();
-    return redirect()->route('Dashboard')->with('message', 'Details Successfully Updated');
+        $member->update($request->input());
+
+
+        return redirect()->route('AdminDashboard')->with('message', 'Information Updated Successfully');
     }
+
 
 
 }

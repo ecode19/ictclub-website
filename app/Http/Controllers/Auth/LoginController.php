@@ -56,7 +56,7 @@ class LoginController extends Controller
         $user = Auth::user(); // Get the authenticated user
 
         if ($user->usertype == 'admin') {
-            return redirect('admin/Dashboard');
+            return redirect('admin/AdminDashboard');
         }
 
         if ($user->usertype == 'user') {

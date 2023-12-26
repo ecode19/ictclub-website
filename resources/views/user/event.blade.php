@@ -13,11 +13,11 @@
 </head>
 
 <body>
-    @if ($user->payment_status == 1)
+    @if ($user->payment_status == 'active')
         <main>
             @include('users/usernav')
             <div class="container text-end mt-3">
-                <h5 class="text-info fw-bold">{{ $user->fullname }}</h5>
+                <h5 class="text-info fw-bold">{{$user->fullname }}</h5>
             </div>
             <div class="container mt-3">
                 <h2 class="text-dark">Club Events</h2>

@@ -19,7 +19,7 @@ class AdminMiddleware
     {
         if (!Auth::check()) {
 
-            return redirect('/login')->with('message', 'Access Denied');
+            return redirect(route('login'))->with('message', 'Access Denied!!');
         }
 
         $usertype = Auth::user();
