@@ -10,14 +10,14 @@
             <ul class="navbar-nav fs-6 mx-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ route('Dashboard') }}">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('membershipCard') }}">Membership Card</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('event') }}">Events</a></li>
+{{--                <li class="nav-item"><a class="nav-link" href="{{ route('event') }}">Events</a></li>--}}
                 <li class="nav-item"><a class="nav-link" href="{{ route('announcement') }}">Announcements</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('resourcesView') }}">Resources</a></li>
-                <li class="nav-item"><a class="nav-link" href="404.php">Discussion Forum</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('discusion_forum') }}">Discussion Forum</a></li>
             </ul>
             {{--    laravel default login script--}}
-            <a  href="{{ route('logout') }}" class="text-decoration-none fw-bold text-warning " onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <button class="btn btn-brand btn-primary btn-sm mt-2"> <i class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+            <a  href="{{ route('logout') }}" class="text-decoration-none text-light " onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                 {{'Logout'}}
             </a>
 
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

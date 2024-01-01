@@ -38,8 +38,7 @@
 </head>
 
 <body>
-    @if ($user->payment_status == 1)
-        @include('users.usernav');
+        @include('user.usernav');
         <section class="mt-4 p-4 p-lg-5">
             <div class="container">
                 <div class="row">
@@ -55,14 +54,14 @@
                             </div>
                             <div class="card-body d-flex">
                                 <div class="">
-                                    <p><strong>RegNo:</strong>{{ $user->registration_number }} </p>
-                                    <p><strong>Full Name: </strong>{{ $user->fullname }}</p>
-                                    <p><strong>Course:</strong> {{ $user->course }}</p>
-                                    <p><strong>Category:</strong>{{ $user->category }}</p>
+                                    <p><strong>RegNo:</strong>{{ Auth::user()->registration_number }} </p>
+                                    <p><strong>Full Name: </strong>{{ Auth::user()->fullname }}</p>
+                                    <p><strong>Course:</strong> {{Auth::user()->course}}</p>
+                                    <p><strong>Category:</strong>{{Auth::user()->category}}</p>
                                 </div>
                                 <div class="mx-auto">
-                                    <img src="../img/logo.jpg" class="img-fluid rounded-circle mt-auto"
-                                        alt="Profile Picture" style="width: 130px; height:130px">
+                                    <img src="{{asset('images/profilePictures/' . Auth::User()->profile_picture)}}" class="img-fluid rounded-circle mt-auto"
+                                         alt="Profile Picture" style="width: 130px; height:130px">
                                 </div>
                             </div>
                             <div class="bg-info w-100"><strong>Date Issued:</strong> <?php echo date('m:d:Y'); ?></div>
@@ -71,11 +70,6 @@
                 </div>
             </div>
         </section>
-    @else
-        @include('users.accessDenied');
-    @endif
-
-
 
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.js') }}"></script>
 </body>

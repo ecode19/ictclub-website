@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Members | Mwecaiu-ICT club</title>
+    <title>Members | Mwecau-ICT club</title>
 
     <!-- for title img -->
     @include('links')
@@ -23,27 +23,26 @@
                 class=" shadow-lg table table-secondary table-hover table-bordered table-striped table-center">
                 <thead>
                     <tr class="fw-bold">
-                        <td>Dept Code</td>
-                        <td>Dept Name</td>
-                        <td>Dept Members</td>
-                        <td>Dept HOD</td>
-                        <td>Usertype</td>
-                        <td>Registered At</td>
+                        <td>S/N</td>
+                        <td>Department Name</td>
+                        <td>Department HOD</td>
+                        <td>Date Created</td>
                         <td>ACTION</td>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (count($members) > 0)
-                        @foreach ($members as $members)
+                @php
+                    $counter = 1;
+                @endphp
+                    @if (count($departments) > 0)
+                        @foreach ($departments as $department)
                             <tr>
-                                <td>{{ $members->fullname }}</td>
-                                <td>{{ $members->registration_number }}</td>
-                                <td>{{ $members->course }}</td>
-                                <td>{{ $members->category }}</td>
-                                <td>{{ $members->usertype }}</td>
-                                <td>{{ $members->created_at }}</td>
-                                <td><a class="btn btn-warning" href="{{ url('editUser', $members->id) }}">Edit</a>
-                                    <a class="btn btn-danger" href="{{ url('deleteUser', $members->id) }}">Delete</a>
+                                <td>{{$counter++}}</td>
+                                <td class="text-dark">{{ $department->dept_name }}</td>
+                                <td>{{ $department->dept_description }}</td>
+                                <td>{{ $department->created_at }}</td>
+                                <td><a class="btn btn-warning" href="{{ url('editUser', $department->id) }}">Edit</a>
+                                    <a class="btn btn-danger" href="{{ url('deleteUser', $department->id) }}">Delete</a>
                                 </td>
                             </tr>
                         @endforeach

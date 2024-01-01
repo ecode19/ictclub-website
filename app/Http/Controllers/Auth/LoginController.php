@@ -58,14 +58,13 @@ class LoginController extends Controller
         if ($user->usertype == 'admin') {
             return redirect('admin/AdminDashboard');
         }
-
         if ($user->usertype == 'user') {
             return redirect('user/Dashboard');
         } else {
-            return redirect('/login')->with('message', 'Something went Wrong');
+            return redirect('/login')->with('fail', 'Something went Wrong');
         }
     } else {
-        return redirect('/login');
+        return redirect('/login')->with('fail', 'Invalid Login Credentials');
     }
 }
 

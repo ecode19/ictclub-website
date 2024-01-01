@@ -68,8 +68,12 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark shadow sticky-top" style="background-color:#19c357;">
         <div class="container">
-            <a href="{{ route('AdminDashboard') }}" class="navbar-brand fw-bolder text-light fs-3">MWECAU ICT CLUB SYSTEM
+            <a href="{{ route('AdminDashboard') }}" class="navbar-brand fw-bolder text-light fs-3">MWECAU ICT CLUB
+                SYSTEM
                 (MICs)</a>
+            <ul class="ms-auto text-light list-unstyled">
+                <li>{{ Auth::user()->fullname }}, ({{ Auth::user()->usertype }})</li>
+            </ul>
             <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
                 aria-controls="offcanvasExample">
                 <span class="">Menu</span>
@@ -115,9 +119,11 @@
                         & Support</button></a>
                 <a href=""><button class="f btn btn-dark mt-3"> show resources</button></a> <br>
 
-{{--    laravel default login script--}}
-                <a  href="{{ route('logout') }}" class="text-decoration-none fw-bold text-warning " onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <button class="btn btn-brand btn-primary btn-sm mt-2"> <i class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+                {{--    laravel default login script --}}
+                <a href="{{ route('logout') }}" class="text-decoration-none fw-bold text-warning "
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <button class="btn btn-brand btn-primary btn-sm mt-2"> <i class="fa fa-sign-out"
+                            aria-hidden="true"></i> Logout</button>
                 </a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -127,9 +133,9 @@
 
         </div>
     </section>
-{{--    <section class="table">--}}
+    {{--    <section class="table"> --}}
 
-{{--    </section>--}}
+    {{--    </section> --}}
     <!--bootstrap javascrip-->
     <!--bootstrap javascrip-->
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.js') }}"></script>

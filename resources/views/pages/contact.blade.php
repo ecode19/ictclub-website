@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 <head>
     <title>Contact Us | ICT Club</title>
@@ -141,7 +141,7 @@
                 <div class="contact-info bottom-border">
                     <h2 class="bottom-border colorIcon">M-ICT Club Address</h2>
                     <p><i class="fas fa-map-marker-alt colorIcon"></i>P.O. Box 1226, Moshi, Kilimanjaro</p>
-                    <p><i class="fa fa-phone colorIcon"></i>Tel: +255-27-2974 110<span></p>
+                    <p><i class="fa fa-phone colorIcon"></i>Tel: +255-27-2974 110</p>
                     <p><i class="fa fa-envelope colorIcon"></i>example@mail.com</p>
                     <p><i class="fa fa-fax colorIcon"></i>Fax: +255-27-2974108</p>
                     <p><i class="fa fa-headset colorIcon"></i>Customer Support</p>

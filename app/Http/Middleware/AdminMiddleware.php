@@ -19,17 +19,14 @@ class AdminMiddleware
     {
         if (!Auth::check()) {
 
-            return redirect(route('login'))->with('message', 'Access Denied!!');
+            return redirect(route('login'))->with('fail', 'Samahani!!, Ufikiaji wa Ukurasa huu Umezuiwa');
         }
 
         $usertype = Auth::user();
         if ($usertype->usertype == 'admin' ) {
              return $next($request);
+        }else{
+          return redirect(route('login'));
         }
-
-        if ($usertype->usertype == 'user' ) {
-             return redirect('/user');
-        }
-
     }
 }
