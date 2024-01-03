@@ -12,11 +12,8 @@
 </head>
 
 <body>
-    {{--        @include('users.usernav') --}}
     @include('admin.adminNav')
     <main>
-        {{--        @extends('layouts.app') --}}
-
         @include('admin.message')
 
         <div class="container">
@@ -58,7 +55,7 @@
                             <div class="fs-4 fw-bold">{{ $activeMembers }}</div>
                             <p class="text-dark">Active Members</p>
                             <hr>
-                            <small><a href="{{route('member_list')}}"
+                            <small><a href="{{ route('member_list') }}"
                                     class="text-decoration-none fs-5 text-dark">View</a></small>
                         </div>
                     </div>
@@ -91,7 +88,7 @@
         </div>
         <form method="post" class="mt-5">
             <a href="member_list.php" class="text-decoration-none fw-bold text-dark">Member list</a>
-            <table id="memberTable"
+            <table id="memberList"
                 class="table table-primary table-hover table-striped table-responsive table-bordered">
                 <thead>
                     <tr>
@@ -105,17 +102,17 @@
                 <tbody>
                     <!-- Fetch member list from the database -->
                     @if (count($members) > 0)
-                        @foreach ($members as $members)
+                        @foreach ($members as $member)
                             <tr>
-                                <td>{{ $members->registration_number }}</td>
-                                <td>{{ $members->fullname }}</td>
-                                <td>{{ $members->course }}</td>
-                                <td>{{ $members->payment_status }}</td>
+                                <td>{{ $member->registration_number }}</td>
+                                <td>{{ $member->fullname }}</td>
+                                <td>{{ $member->course }}</td>
+                                <td>{{ $member->payment_status }}</td>
                                 {{-- <td>{{ $members->created_at }}</td> --}}
                                 <td><a class="btn btn-warning"
-                                        href="{{ route('update', ['id' => $members->id]) }}">Edit</a>
+                                        href="{{ route('update', ['id' => $member->id]) }}">Edit</a>
 
-                                    <a class="btn btn-danger" href="{{ url('deleteUser', $members->id) }}">Delete</a>
+                                    <a class="btn btn-danger" href="{{ url('deleteUser', $member->id) }}">Delete</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -129,16 +126,11 @@
         </form>
         </div>
         {{-- @else --}}
-        {{-- @include('users.accessDenied') --}}
     </main>
     {{-- @endif --}}
-    <!--bootstrap javascrip-->
-    <script>
-        $(document).ready(function() {
-            $('#memberTable').DataTable();
-        });
-    </script>
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.js') }}"></script>
+
+    <script src="{{ asset('../bootstrap/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
 </body>
 
 </html>

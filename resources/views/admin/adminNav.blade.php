@@ -6,11 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <!--links-->
 
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="bootstrap/css/dataTables.bootstrap5.min.css">
+    @include('links')
     <style>
         :root {
             --offcanvas-width: 230px;
@@ -133,12 +130,7 @@
 
         </div>
     </section>
-    {{--    <section class="table"> --}}
-
-    {{--    </section> --}}
-    <!--bootstrap javascrip-->
-    <!--bootstrap javascrip-->
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('../bootstrap/js/bootstrap.bundle.js') }}"></script>
 </body>
 
 </html>

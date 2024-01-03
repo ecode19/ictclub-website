@@ -15,54 +15,55 @@
     <main>
         @include('admin.message')
         <div class="container">
-            <form class="mx-5 mt-5" action="{{route('newMember')}}" method="post" autocomplete="off">
+            <form class="mx-5 mt-5" action="{{ route('newMember') }}" method="post" autocomplete="off">
                 @csrf
-
                 @include('admin.message')
                 <h1 class="text-primary fs-3">Register new Member</h1>
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
                         <label class="fw-bold" for="registration_number">REGISTRATION NUMBER</label>
-                        <input type="text" class="form-control @error('registration_number') is-invalid @enderror" value="{{old('registration_number')}}" name="registration_number"
-                               placeholder="Enter Member Registration Number">
+                        <input type="text" class="form-control @error('registration_number') is-invalid @enderror"
+                            value="{{ old('registration_number') }}" name="registration_number" id="registration_number"
+                            placeholder="Enter Member Registration Number">
 
                         @error('registration_number')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
 
                     </div>
 
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
-                        <label class="fw-bold" for="Full name">Full Name</label>
-                        <input type="text" class="form-control @error('fullname') is-invalid @enderror" name="fullname" value="{{old('fullname')}}"
-                               placeholder="Enter Full Name">
+                        <label class="fw-bold" for="fullname">Full Name</label>
+                        <input type="text" class="form-control @error('fullname') is-invalid @enderror"
+                            name="fullname" value="{{ old('fullname') }}" id="fullname" placeholder="Enter Full Name">
 
                         @error('fullname')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
 
                     </div>
 
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
                         <label class="fw-bold" for="email">E-Mail</label>
-                        <input type="email" class="form-control @error('fullname') is-invalid @enderror" name="email" value="{{old('email')}}"
-                               placeholder="Enter Valid E-Mail Address">
+                        <input type="email" class="form-control @error('fullname') is-invalid @enderror"
+                            name="email" value="{{ old('email') }}" id="email"
+                            placeholder="Enter Valid E-Mail Address" autocomplete="on">
 
                         @error('email')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
 
                     </div>
 
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
-                        <label class="fw-bold" for="GENDER">Course</label>
-                        <select class="form-select" name="course">
+                        <label class="fw-bold" for="course">Course</label>
+                        <select class="form-select" name="course" id="course">
                             <option value="BAGEN">BAGEN</option>
                             <option value="BScCS">BScCS</option>
                             <option value="Biology ICT">Biology ICT</option>
@@ -71,15 +72,15 @@
                         </select>
 
                         @error('course')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
 
                     </div>
                     <div class="col-12 col-md-12 col-lg-6">
                         <label class="fw-bold" for="category">Category</label>
-                        <select class="form-select" name="category">
+                        <select class="form-select" name="category" id="category">
                             <option value="Graphics Designing">Graphics Designing</option>
                             <option value="Programming">Programming</option>
                             <option value="Cyber Security">Cyber Security</option>
@@ -89,24 +90,26 @@
                     </div>
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
                         <label class="fw-bold" for="password">Password</label>
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter Password">
+                        <input type="password" class="form-control @error('password') is-invalid @enderror"
+                            name="password" id="password" placeholder="Enter Password">
 
                         @error('password')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{$message}}</strong>
-                        </span>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
 
                     </div>
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
                         <label class="fw-bold" for="confirmPassword">CONFIRM PASSWORD</label>
-                        <input type="password" class="form-control" name="password_confirmation"
+                        <input type="password" class="form-control" name="password_confirmation" id="confirmPassword"
                             placeholder="Re-type your password">
 
                         <span class="text-danger p-1"> </span>
 
                     </div>
-                    <button type="submit" class="btn btn-lg mt-5 fw-bold" style="background-color:#19c357">REGISTER</button>
+                    <button type="submit" class="btn btn-lg mt-5 fw-bold"
+                        style="background-color:#19c357">REGISTER</button>
                 </div>
             </form>
         </div>

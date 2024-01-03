@@ -50,6 +50,9 @@ class LoginController extends Controller
     $data = $request->validate([
         'registration_number' => 'required',
         'password' => 'required',
+    ],[
+        'registration_number' => 'The registration number field is required',
+        'password' => 'The assword field is required'
     ]);
 
     if (Auth::attempt($data)) {

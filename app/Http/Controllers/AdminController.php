@@ -71,6 +71,9 @@ class AdminController extends Controller
             'description'=>['required'],
             'category'=>['required'],
             'file_path'=>['required', 'file'],
+        ],[
+            'description' => 'The resource description field is required',
+            'file_path' => 'You must select file'
         ]);
 
         // Store the uploaded file
