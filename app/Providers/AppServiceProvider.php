@@ -9,12 +9,6 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-     public function boot(UrlGenerator $url)
-    {
-        if (env('APP_ENV') == 'production') {
-            $url->forceScheme('https');
-        }
-    }
     
     public function register()
 {
