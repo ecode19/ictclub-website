@@ -1,23 +1,66 @@
-version: "3.8"
+version: '3.8'
 services:
-  # Database server
-  database:
-    image: mysql:8.0
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: 19IT?!@@password.docker
+  main:
+    container_name: Serve
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: 'php artisan serve --host=0.0.0.0'
     volumes:
-      - db-data:/var/lib/mysql
-    command: --default-authentication-plugin=mysql_native_password
+      - .:/app
+    ports:
+      - 8000:8000
 
-  # Redis server
-  #redis:
-    #image: redis:alpine
-    #command: redis-server --appendonly yes --requirepass 19IT?!@@password.redis
-    #ports:
-    #  - "6379:6379"
+  queue:
+    container_name: Queue
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: 'php artisan queue:work'
+    depends_on:
+      - db
+
+  db:
+    platform: linux/x86_64
+    image: mysql:8.0
+    container_name: Database
+    environment:
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_ROOT: "root"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: PhpMyAdmin
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: MailPit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - laravel-exa
+
+networks:
+  laravel-exa:
+    driver: bridge
 
 volumes:
-  db-data: ~
+  db:
+    driver: local
