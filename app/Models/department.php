@@ -14,4 +14,8 @@ class department extends Model
         'dept_name',
         'dept_description',
     ];
+
+      public function admins() {
+        return $this->hasMany(Admin::class);
+    }
 }

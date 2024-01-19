@@ -5,6 +5,7 @@ use App\Models\user;
 use App\Models\event;
 use App\Models\resource;
 use App\Models\department;
+use App\Models\admin;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -15,13 +16,14 @@ class AdminController extends Controller
     public function Dashboard(){
 
         $adminName = Auth::user()->fullname;
+        $adminDept = Admin::first();
 
-    $allMembers = User::all()->count();//fetching total number of members from the database
-    $activeMembers = user::where('payment_status', 'active')->count(); // fetching all active members
-    $inactiveMembers = user::where('payment_status', 'inactive')->count(); //fetching all inactive members
+        $allMembers = User::all()->count();//fetching total number of members from the database
+        $activeMembers = user::where('payment_status', 'active')->count(); // fetching all active members
+        $inactiveMembers = user::where('payment_status', 'inactive')->count(); //fetching all inactive members
         $totalDepartments = Department::all()->count();
-    $members = User::all();
-        return view ('admin/AdminDashboard', compact('adminName', 'allMembers', 'activeMembers', 'inactiveMembers','members','totalDepartments'));
+        $members = User::all();
+        return view ('admin/AdminDashboard', compact('adminName','adminDept', 'allMembers', 'activeMembers', 'inactiveMembers','members','totalDepartments'));
     }
     public function post(){
 

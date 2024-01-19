@@ -46,8 +46,7 @@ Route::post('newMember','newMember')->name('newMember');
     });
 
 
-
-    // Defining user Routes
+// Defining user Routes
 Route::controller(UserController::class)->prefix('user')->middleware(['user', 'payment'])->group(function(){
 Route::get('Dashboard', 'Dashboard')->name('Dashboard');
 //    Route::get('event', 'event')->name('event');
@@ -65,11 +64,3 @@ Route::get('Dashboard', 'Dashboard')->name('Dashboard');
 Route::controller(UserController::class)->prefix('user')->group(function(){
     Route::get('accessDenied', 'accessDenied')->name('accessDenied');
 });
-
-// Route::get('admin', function () {
-//     return view('admin');
-// })->name('admin')->middleware('admin');
-
-// Route::get('user', function () {
-//     return view('user');
-// })->name('user')->middleware('user');

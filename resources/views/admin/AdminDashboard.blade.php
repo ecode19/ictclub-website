@@ -30,6 +30,8 @@
         </div>
         <div class="row">
             <div class="mt-3">
+                <p class="text-primary fw-bold">{{ $adminDept->department->dept_name }}</p>
+                <p class="text-primary fw-bold">{{ $adminDept->user->usertype }}</p>
             </div>
             <div class="col-12 col-md-6 col-lg-3 mt-2">
                 <div class="card shadow hv">
