@@ -112,6 +112,7 @@
                 </div>
             </div>
         </div>
+    </section>
 
         <section>
             <div class="container-fluid mb-5">

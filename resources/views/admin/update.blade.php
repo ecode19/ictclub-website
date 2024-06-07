@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update | ICT Club</title>
-    <!--links-->
-    @include('links')
-</head>
-
-<body>
-    @include('admin.adminNav')
-    <main>
+@extends('layouts.admin')
+@section('content')
+        @include('sweetalert::alert')
         @include('admin.message')
         <div class="container">
             <form class="mx-5 mt-5" action="{{ route('edit', $members->id) }}" method="post" autocomplete="off">
@@ -87,6 +75,4 @@
                 <button type="submit" name="update" class="btn btn-warning text-dark fw-bold">Update</button>
             </form>
         </div>
-</body>
-
-</html>
+@endsection

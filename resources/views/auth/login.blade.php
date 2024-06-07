@@ -81,8 +81,10 @@
 {{-- @endsection --}}
 
 <!--End Navbar-->
+
 @include('links')
-<section class="bg-dark">
+<section class="" style="background: linear-gradient(to right, #012499, #011033);">
+    @include('sweetalert::alert')
     <div class="container">
         <div class="row g-0">
             <div class="col-md py-5 p-5 text-center" data-aos="fade-right" data-aos-duration="2000">
@@ -150,7 +152,7 @@
                     </div>
                     <!--Sign in with-->
                     <div class="col-md py-3" data-aos="fade-up" data-aos-duration="2000">
-                        <p>Or Sign in with</p>
+                        <p class="text-white">Or Sign in with</p>
                         <a href="https://www.facebook.com/YourFacebookURLHere" target="_blank" class="btn btn-primary">
                             <i class="fab fa-facebook-f btn-floating mx-1"></i>
                         </a>

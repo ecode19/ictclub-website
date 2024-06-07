@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.web')
 @include('links')
 @section('content')
     <div class="container">
@@ -14,7 +14,7 @@
 
                             <div class="row mb-3">
                                 <label for="registration_number"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Registration Number') }}</label>
+                                    class="col-md-4 col-form-label text-md-end ">{{ __('Registration Number') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="registration_number" type="text"
@@ -32,7 +32,7 @@
 
                             <div class="row mb-3">
                                 <label for="fullname"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('fullname') }}</label>
+                                    class="col-md-4 col-form-label text-md-end ">{{ __('Fullname') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="fullname" type="text"
@@ -49,7 +49,7 @@
 
                             <div class="row mb-3">
                                 <label for="email"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                                    class="col-md-4 col-form-label text-md-end ">{{ __('Email Address') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="email" type="email"
@@ -66,12 +66,17 @@
 
                             <div class="row mb-3">
                                 <label for="course"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Course') }}</label>
+                                    class="col-md-4 col-form-label text-md-end ">{{ __('Course') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="course" type="course"
-                                        class="form-control @error('course') is-invalid @enderror" name="course"
-                                        value="{{ old('course') }}" required autocomplete="course">
+                                    <select class="form-select @error('course') is-invalid @enderror" name="course"
+                                        id="course">
+                                        <option value="1">BScCS</option>
+                                        <option value="2">BAGEN</option>
+                                        <option value="3">Biology ICT</option>
+                                        <option value="3">Chemistry ICT</option>
+                                        <option value="3">Statistics ICT</option>
+                                    </select>
 
                                     @error('course')
                                         <span class="invalid-feedback" role="alert">
@@ -83,12 +88,21 @@
 
                             <div class="row mb-3">
                                 <label for="category"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Category') }}</label>
+                                    class="col-md-4 col-form-label text-md-end ">{{ __('Category') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="category" type="category"
+                                    <select class="form-select form-select-lg mb-3 @error('category') is-invalid @enderror"
+                                        aria-label=".form-select-lg example">
+                                        <option value="1">programming</option>
+                                        <option value="2">graphics designing</option>
+                                        <option value="3">cyber security</option>
+                                        <option value="3">Comp Maintenance</option>
+                                        <option value="3">Web Development</option>
+                                    </select>
+
+                                    {{-- <input id="category" type="category"
                                         class="form-control @error('category') is-invalid @enderror" name="category"
-                                        value="{{ old('category') }}" required autocomplete="category">
+                                        value="{{ old('category') }}" required autocomplete="category"> --}}
 
                                     @error('category')
                                         <span class="invalid-feedback" role="alert">
@@ -100,7 +114,7 @@
 
                             <div class="row mb-3">
                                 <label for="password"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+                                    class="col-md-4 col-form-label text-md-end ">{{ __('Password') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="password" type="password"
@@ -117,7 +131,7 @@
 
                             <div class="row mb-3">
                                 <label for="password-confirm"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
+                                    class="col-md-4 col-form-label text-md-end ">{{ __('Confirm Password') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="password-confirm" type="password" class="form-control"

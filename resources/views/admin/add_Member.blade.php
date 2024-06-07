@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | ICT Club</title>
-    <!--links-->
-    @include('links')
-</head>
-
-<body>
-    @include('admin.adminNav')
-    <main>
+@extends('layouts.admin')
+@section('content')
         @include('admin.message')
         <div class="container">
             <form class="mx-5 mt-5" action="{{route('newMember')}}" method="post" autocomplete="off">
                 @csrf
 
                 @include('admin.message')
-                <h1 class="text-primary fs-3">Register new Member</h1>
+                <h1 class="colorIcon">Register member</h1>
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
-                        <label class="fw-bold" for="registration_number">REGISTRATION NUMBER</label>
+                        <label class="mb-2" for="registration_number">Registration Number</label>
                         <input type="text" class="form-control @error('registration_number') is-invalid @enderror" value="{{old('registration_number')}}" name="registration_number"
                                placeholder="Enter Member Registration Number">
 
@@ -35,7 +22,7 @@
                     </div>
 
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
-                        <label class="fw-bold" for="Full name">Full Name</label>
+                        <label class="mb-2" for="Full name">Full Name</label>
                         <input type="text" class="form-control @error('fullname') is-invalid @enderror" name="fullname" value="{{old('fullname')}}"
                                placeholder="Enter Full Name">
 
@@ -48,7 +35,7 @@
                     </div>
 
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
-                        <label class="fw-bold" for="email">E-Mail</label>
+                        <label class="mb-2" for="email">E-Mail</label>
                         <input type="email" class="form-control @error('fullname') is-invalid @enderror" name="email" value="{{old('email')}}"
                                placeholder="Enter Valid E-Mail Address">
 
@@ -61,7 +48,7 @@
                     </div>
 
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
-                        <label class="fw-bold" for="GENDER">Course</label>
+                        <label class="mb-2" for="GENDER">Course</label>
                         <select class="form-select" name="course">
                             <option value="BAGEN">BAGEN</option>
                             <option value="BScCS">BScCS</option>
@@ -78,17 +65,17 @@
 
                     </div>
                     <div class="col-12 col-md-12 col-lg-6">
-                        <label class="fw-bold" for="category">Category</label>
+                        <label class="mb-2" for="category">Category</label>
                         <select class="form-select" name="category">
-                            <option value="Graphics Designing">Graphics Designing</option>
-                            <option value="Programming">Programming</option>
-                            <option value="Cyber Security">Cyber Security</option>
+                            <option value="Graphics Designing">graphics designing</option>
+                            <option value="Programming">programming</option>
+                            <option value="Cyber Security">cyber security</option>
                             <option value="Comp Maintenance">Comp Maintenance</option>
-                            <option value="Web Development">Web Development</option>
+                            <option value="Web Development">web development</option>
                         </select>
                     </div>
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
-                        <label class="fw-bold" for="password">Password</label>
+                        <label class="mb-2" for="password">Password</label>
                         <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter Password">
 
                         @error('password')
@@ -99,18 +86,16 @@
 
                     </div>
                     <div class="col-12 col-md-12 col-lg-6 mb-4">
-                        <label class="fw-bold" for="confirmPassword">CONFIRM PASSWORD</label>
+                        <label class="mb-2" for="confirmPassword">Confirm password</label>
                         <input type="password" class="form-control" name="password_confirmation"
                             placeholder="Re-type your password">
 
                         <span class="text-danger p-1"> </span>
 
                     </div>
-                    <button type="submit" class="btn btn-lg mt-5 fw-bold" style="background-color:#19c357">REGISTER</button>
+
                 </div>
+                <button type="submit" class="btn btn-success mt-5">Register</button>
             </form>
         </div>
-    </main>
-</body>
-
-</html>
+@endsection

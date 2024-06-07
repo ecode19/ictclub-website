@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\admin;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -48,4 +49,17 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    //relation between user and admin
+    public function admin()
+    {
+        return $this->hasOne(Admin::class);
+    }
+
+    //relations between user and payment model
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
 }

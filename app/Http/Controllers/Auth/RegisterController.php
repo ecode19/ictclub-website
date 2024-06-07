@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+use App\Rules\ValidRegistrationNumber;
+use App\Rules\NoCommonPasswords;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
@@ -50,12 +52,20 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'registration_number' => ['required', 'unique:users'],
+            'registration_number' => ['required', 'unique:users', new ValidRegistrationNumber],
             'fullname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'course' => ['required'],
             'category' => ['required'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed', new NoCommonPasswords],
+        ], [
+            'registration_number.required' => 'registration number field is required',
+            'registration_number.unique' => 'Member with this registration number already exist.',
+            'email.required' => 'email field is required',
+            'email.unique' => 'This email has already been taken',
+            'password.min' => 'password should have more that 8 characters',
+            'password.required' => 'Password is required',
+
         ]);
     }
 

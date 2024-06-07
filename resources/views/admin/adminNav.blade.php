@@ -133,12 +133,6 @@
 
         </div>
     </section>
-    {{--    <section class="table"> --}}
-
-    {{--    </section> --}}
-    <!--bootstrap javascrip-->
-    <!--bootstrap javascrip-->
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.js') }}"></script>
 </body>
 
 </html>

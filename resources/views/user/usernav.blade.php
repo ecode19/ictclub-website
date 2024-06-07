@@ -1,15 +1,14 @@
-<nav class="navbar navbar-expand-lg navbar-dark shadow-lg sticky-top" style="background-color: #19c357; color:black;">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-lg sticky-top" style="background: linear-gradient(to right, #031a47, #4a649b);">
     <div class="container">
-        <a href="{{ route('Dashboard') }}" class="navbar-brand text-warning"><img
-                class="img-fluid ms-auto rounded-circle d-none d-sm-block" src="../img/logo.jpg"
+        <a href="{{ route('member.dashboard') }}" class="navbar-brand text-warning"><img
+                class="img-fluid ms-auto rounded-circle d-none d-sm-block" src="../../img/logo.jpg"
                 style="width: 100px; heig"></a>
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navmenu">
             Menu<span class="navbar-toggler-ico"></span>
         </button>
         <div class="collapse navbar-collapse" id="navmenu">
             <ul class="navbar-nav fs-6 mx-auto">
-                <li class="nav-item"><a class="nav-link" href="{{ route('Dashboard') }}">Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('membershipCard') }}">Membership Card</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('member.dashboard') }}">Profile</a></li>
 {{--                <li class="nav-item"><a class="nav-link" href="{{ route('event') }}">Events</a></li>--}}
                 <li class="nav-item"><a class="nav-link" href="{{ route('announcement') }}">Announcements</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('resourcesView') }}">Resources</a></li>

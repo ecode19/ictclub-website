@@ -61,6 +61,6 @@
       </div>
   </footer>
   <div class="container">
-      <p class="text-center text-dark"><i class="fa fa-copyright colorIcon"></i> <?php echo date('Y'); ?> Ecode Technologies
+      <p class="text-center text-dark"><i class="fa fa-copyright colorIcon"></i> <?php echo date('Y'); ?> Ecode Technologies.
       </p>
   </div>

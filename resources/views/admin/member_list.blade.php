@@ -1,22 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Members | Mwecaiu-ICT club</title>
-
-    <!-- for title img -->
-    @include('links')
-</head>
-
-<body>
-    @include('admin.adminNav')
-    <main>
+@extends('layouts.admin')
+@section('content')
         @include('admin.message')
         <div class="container">
-            <a href="{{ route('add_Member') }}"><button class="btn btn-primary mx-5 mt-3 text-sm-end">Add New</button></a>
+            <a href="{{ route('admin.register.member') }}"><button class="btn btn-primary btn-sm mx-5 mt-3 text-sm-end"> <i class="fa fa-user-plus" aria-hidden="true"></i> Add New</button></a>
             <h1 class="text-primary text-center">Mwecau ICT Club Members </h1>
             <table id="memberTable"
                 class=" shadow-lg table table-secondary table-hover table-bordered table-striped table-center">
@@ -41,8 +27,17 @@
                                 <td>{{ $members->category }}</td>
                                 <td>{{ $members->usertype }}</td>
                                 <td>{{ $members->created_at }}</td>
-                                <td><a class="btn btn-warning" href="{{ url('editUser', $members->id) }}">Edit</a>
-                                    <a class="btn btn-danger" href="{{ url('deleteUser', $members->id) }}">Delete</a>
+                                <td>
+                                    <a class="btn btn-warning" href="{{ route('update', ['id' => $members->id]) }}">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    </a>
+                                    <form method="POST" action="{{ route('destroy.member', [$members->id]) }}"
+                                        enctype="multipart/form-data" class="delete-form d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm delete-button delete-btn"><i
+                                                class="fa fa-trash-alt" aria-hidden="true"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
@@ -52,12 +47,10 @@
                 </tbody>
             </table>
         </div>
-    </main>
+
     <script>
         $(document).ready(function() {
             $('#memberTable').DataTable();
         });
     </script>
-</body>
-
-</html>
+@endsection
