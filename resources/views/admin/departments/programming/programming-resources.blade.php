@@ -19,7 +19,7 @@
                                         <button class="btn btn-primary btn-sm"> <i class="fa fa-eye" aria-hidden="true"></i>
                                             Preview</button> </a>
 
-                                    <a href="{{ route('cyber-security.resource.update.view', [$resource->id]) }}"><button
+                                    <a href="{{ route('programming.resource.update.view', [$resource->id]) }}"><button
                                             class="btn btn-warning btn-sm mx-1"> <i class="fa fa-pencil"
                                                 aria-hidden="true"></i>Edit</button></a>
 

@@ -94,7 +94,7 @@
                 <form action="{{ route('login') }}" method="post" autocomplete="off">
                     @csrf
                     @method('post')
-                    <p class="lead fw-normal mb-3 mx-5 text-lg-start text-white">Sign in</p>
+                    <p class="lead fs-4 mb-3 mx-5 text-lg-start text-white fw-bold">Sign in</p>
 
                     @if (session()->has('fail'))
                         <div class="alert alert-danger p-1 col-lg-9" role="alert">
@@ -104,7 +104,7 @@
 
                     <!--input for Registration Number-->
                     <div class="form-outline mt-4 col-lg-9" data-aos="zoom-in-right">
-                        <label class="form-label fs-5 text-warning" for="registration number">REGISTRATION
+                        <label class="form-label text-light" for="registration number">REGISTRATION
                             NUMBER</label>
                         <input type="text" name="registration_number" placeholder="Enter valid Registration number"
                             class="form-control @error('registration_number') is-invalid @enderror">
@@ -120,7 +120,7 @@
 
                     <!--input for password-->
                     <div class="form-outline mt-4 col-lg-9" data-aos="zoom-in-left">
-                        <label class="form-label fs-5 text-warning" for="Email">PASSWORD</label>
+                        <label class="form-label text-light" for="Email">PASSWORD</label>
                         <input type="password" name="password" placeholder="Type your password"
                             class="form-control @error('password') is-invalid @enderror">
                         <div>

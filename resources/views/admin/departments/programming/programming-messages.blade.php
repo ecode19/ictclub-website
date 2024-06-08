@@ -3,7 +3,7 @@
     <div class="container">
         <div class="mt-5">
             <h4 class="">Programming Messages from website Users.</h4>
-
+            <hr>
             @php
                 $counter = 1;
             @endphp
@@ -30,8 +30,9 @@
                 @endforeach
             @endif
             @if ($comments->isEmpty())
-                <p class="alert alert-warning shadow-lg">Currently there is no comment from website relating to
-                    programming department.</p>
+                <p class="alert alert-warning shadow-lg">Currently, there is no Message from website relating to
+                    <strong>programming department.</strong>
+                </p>
             @endif
         </div>
     @endsection

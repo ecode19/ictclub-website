@@ -94,7 +94,6 @@
                         @csrf
                     </form>
                 </ul>
-
             </div>
 
             <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
@@ -154,7 +153,7 @@
                     </button>
                 </a>
 
-                <a href="{{ route('programming.department') }}">
+                <a href="">
                     <button class="w-100 btn btn-dark mt-3 text-start">
                         <i class="fas fa-dollar"></i>
                         <small>Financial Tracking</small>
@@ -169,13 +168,13 @@
                 </a>
 
                 <a class="btn btn-secondary btn-sm mt-2 w-100 text-start" href="{{ route('logout') }}"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fa fa-sign-out" aria-hidden="true"></i> {{ __('Logout') }}
-            </a>
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i> {{ __('Logout') }}
+                </a>
 
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
 
                 <hr>
 

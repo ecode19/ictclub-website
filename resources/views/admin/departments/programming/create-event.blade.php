@@ -82,7 +82,7 @@
                             <td>{{ $counter++ }}</td>
                             <td>{{ $event->event_name }}</td>
                             <td>
-                                <a but href="{{ route('cyber-security.event.details', [$event->id]) }}"><button
+                                <a but href="{{ route('programming.event.details', [$event->id]) }}"><button
                                         class="btn btn-warning btn-sm mx-2"> <i class="fa fa-eye"
                                             aria-hidden="true"></i></button></a>
 

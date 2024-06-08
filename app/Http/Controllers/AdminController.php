@@ -42,11 +42,7 @@ class AdminController extends Controller
 
         return view('admin/post_event');
     }
-    // public function addMember()
-    // {
 
-    //     return view('admin/add_member');
-    // }
     public function addMember()
     {
         return view('admin.add_Member');

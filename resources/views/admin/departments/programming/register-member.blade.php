@@ -1,7 +1,7 @@
 @extends('layouts.programming')
 @section('content')
     <div class="container">
-        <form class="mx-5 mt-5" action="" method="post" autocomplete="off">
+        <form class="mx-5 mt-5" action="{{ route('new.programming.member') }}" method="post" enctype="multipart/form-data" autocomplete="off">
             @csrf
             @method('POST')
             {{-- @include('admin.message') --}}

@@ -2,7 +2,7 @@
 @section('content')
     <div class="container mt-5">
         <h2 class="">Resources Management Panel</h2>
-        <form action="{{ route('cyber-security.upload.resource') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('programming.upload.resource') }}" method="post" enctype="multipart/form-data">
             @method('post')
             @csrf
             <div class="form-group">
@@ -74,8 +74,8 @@
                     </span>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-primary btn-sm mb-3 mt-3"> <i class="fa fa-upload" aria-hidden="true"></i>
-                re-upload</button>
+            <button type="submit" class="btn btn-primary btn-sm mb-3 mt-3"> <i class="fa fa-save" aria-hidden="true"></i>
+                Save</button>
         </form>
         {{-- @if ($resources->count() > 0)
             <div class="row">

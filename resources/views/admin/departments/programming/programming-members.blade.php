@@ -28,10 +28,12 @@
                 <tbody>
                     @php
                         $counter = 1;
+                        $active = 0;
                     @endphp
                     @if ($programmingMembers->count() > 0)
                         @foreach ($programmingMembers as $programmingMember)
                             @if ($programmingMember->payment_status == 'active')
+                                {{ $active++ }}
                                 <tr>
                                     <td>{{ $counter++ }}</td>
                                     <td>{{ $programmingMember->registration_number }}</td>
@@ -39,7 +41,7 @@
                                     <td>{{ $programmingMember->category }}</td>
 
                                     <td>
-                                        <a href="">
+                                        <a href="{{ route('programming.update.member.view', [$programmingMember->id]) }}">
                                             <button class="btn btn-warning btn-sm mx-2"><i class="fa fa-eye"
                                                     aria-hidden="true"></i></button>
                                         </a>
@@ -55,10 +57,16 @@
                                     </td>
                                 </tr>
                             @else
-                                <div class="alert alert-warning" role="alert"> No active members found. Please check the
-                                    inactive members list for more information.</div>
+                                @continue
+                                {{-- <div class="alert alert-warning" role="alert"> No active members found. Please check the
+                                    inactive members list for more information.</div> --}}
                             @endif
                         @endforeach
+                    {{-- @else --}}
+                    @endif
+                    @if ($active == 0)
+                        <div class="alert alert-warning" role="alert"> No active members found. Please check the
+                            inactive members list for more information.</div>
                     @endif
                 </tbody>
             </table>
@@ -91,7 +99,7 @@
                                     <td>{{ $programmingMember->category }}</td>
 
                                     <td>
-                                        <a href="">
+                                        <a href="{{ route('programming.update.member.view', [$programmingMember->id]) }}">
                                             <button class="btn btn-warning btn-sm mx-2"> <i class="fa fa-eye"
                                                     aria-hidden="true"></i></button>
                                         </a>
@@ -106,11 +114,12 @@
                                         </form>
                                     </td>
                                 </tr>
-                            @else
-                                <div class="alert alert-warning" role="alert"> All members currently have an active
-                                    status. Please check the active members list for more information.</div>
-                            @endif
+                                @endif
+
                         @endforeach
+                        @else
+                        <div class="alert alert-warning" role="alert"> All members currently have an active
+                            status. Please check the active members list for more information.</div>
                     @endif
                 </tbody>
             </table>

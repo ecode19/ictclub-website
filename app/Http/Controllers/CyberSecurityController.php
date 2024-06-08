@@ -33,8 +33,7 @@ class CyberSecurityController extends Controller
             ->where('id', '!=', $authenticatedUser->id)
             ->count();
 
-        //fetching all inactive members under programming department
-        //fetching all inactive members under programming department
+        //fetching all inactive members under cyber department department
         $inactiveMembers = user::where('payment_status', 'inactive')
             ->where('category', 'cyber security')
             ->where('id', '!=', $authenticatedUser->id)

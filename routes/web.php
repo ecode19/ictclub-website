@@ -43,7 +43,7 @@ Route::get('/privacy-policy', [App\Http\Controllers\HomeController::class, 'priv
 Route::get('/licence and use', [App\Http\Controllers\HomeController::class, 'licenceAndUse'])->name('licence and use.page');
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 
-// Defining Admin Routes
+// Defining super Admin Routes
 Route::controller(AdminController::class)->prefix('admin')->middleware('admin')->group(function () {
     Route::get('AdminDashboard', 'Dashboard')->name('AdminDashboard');
     Route::get('comments', 'comments')->name('admin.comments');
@@ -71,24 +71,28 @@ Route::controller(AdminController::class)->prefix('admin')->middleware('admin')-
 // Defining programming admin Routes
 Route::controller(ProgrammingController::class)->prefix('admin/departments')->middleware('auth', 'programming')->group(function () {
     Route::get('programming/dashboard', 'programmingDepartment')->name('programming.dashboard');
-
+    //programming member
     Route::get('/programming/register-member', 'register')->name('programming.register.member');
+    Route::post('/register-programming-member', 'newProgrammingMember')->name('new.programming.member');
     Route::get('/programming/programming-members', 'programmingMembers')->name('programming.members');
     Route::get('/programming/registration-numbers', 'registerNumbers')->name('programming.register.number');
+    Route::get('/programming/update-member-details/{id}', 'memberUpdateView')->name('programming.update.member.view');
+    Route::put('/edit/informations/{id}', 'edit')->name('update.member.info');
     Route::delete('/programming-member/delete/{id}', 'memberDestroy')->name('programming.member.delete');
-    // Route::delete('/delete/member/{id}', 'memberDestroy')->name('programming.member.delete'));
-
+    //programming routes related to event
     Route::get('/programming/create-event', 'createEvent')->name('programming.create.event');
     Route::post('/programming/post-event', 'eventUpload')->name('programming.postEvent');
-    Route::get('/programming/event-details/{id}', 'cyberEventDetails')->name('programming.event.details');
+    Route::get('/programming/event-details/{id}', 'programmingEventDetails')->name('programming.event.details');
     Route::delete('/programming/event/{id}', 'eventDestroy')->name(('programming.destroy.event'));
-
+    //programming routes related to resources
     Route::get('/programming/post-resources', 'resources')->name('programming.post-resources');
     Route::post('/programming-upload-resource', 'uploadResource')->name('programming.upload.resource');
     Route::get('/programming/update-resource/{id}', 'resourceUpdateView')->name('programming.resource.update.view');
     Route::get('/programming/programming-resources', 'programmingResources')->name('programming.resource.view');
     route::delete('/delete/resource/{id}', 'destroy')->name('resource.destroy');
-
+    //programming routes related to finance
+    route::get('/department-financial-panel', 'programmingFinancial')->name('programming.financial.panel');
+    //programming routes related to messages from website users
     Route::get('/programming-messages', 'programmingMessages')->name('programming.messages');
     Route::delete('/programming/message-destroty{id}', 'messageDestroy')->name('programming.message.destroy');
     Route::get('/name/search', 'searchByRegNumber')->name('names.search');
@@ -101,27 +105,27 @@ Route::controller(ProgrammingController::class)->prefix('admin/departments')->mi
 //cyber security department routes
 Route::controller(CyberSecurityController::class)->prefix('admin/departments')->middleware('auth', 'cyber-security')->group(function () {
     Route::get('/cyber-security/dashboard', 'cyberSecurityDepartment')->name('cyberSecurity.department');
+    //cyber security routes related to cyber member
     Route::get('/cyber-security/register-member', 'register')->name('cyber-security.register.member');
     Route::get('/cyber-security/cyber-security-members', 'cyberMembers')->name('cyber-security.members');
     Route::get('/cyber-security/registration-numbers', 'registerNumbers')->name('cyber-security.register.number');
     Route::delete('/delete/member/{id}', 'memberDestroy')->name('cyber-security.member.destroy');
-
+    //cyber security related to cyber event
     Route::get('/cyber-security/create-event', 'createEvent')->name('cyber-security.create.event');
     Route::post('/cyber-security/post-event', 'eventUpload')->name('cyber-security.postCyberEvent');
     Route::get('/cyber-security/event-details/{id}', 'cyberEventDetails')->name('cyber-security.event.details');
     Route::delete('/cyber-security/event/{id}', 'eventDestroy')->name(('cyber-security.destroy.event'));
-
+    //cyber security routes related to cyber resources
     Route::get('/cyber-security/post-resources', 'resources')->name('cyber-security.post-resources');
     Route::post('/uploading-cyber-resource', 'uploadResource')->name('cyber-security.upload.resource');
     Route::get('/cyber-security/update-resource/{id}', 'resourceUpdateView')->name('cyber-security.resource.update.view');
     Route::get('/cyber-security/cyber-resources', 'cyberResources')->name('cyber-security.resource.view');
     route::delete('/delete/resource/{id}', 'destroy')->name('resource.destroy');
-
+    //cyber security routes related to messages from website users
     Route::get('/cyberSecurity-messages', 'cyberMessages')->name('cyber-security.messages');
     Route::delete('/cyber-security/message-destroty{id}', 'messageDestroy')->name('cyber-security.message.destroy');
     Route::get('/name/search', 'searchByRegNumber')->name('names.search');
 });
-
 
 // Defining user Routes
 Route::controller(UserController::class)->prefix('user')->middleware(['auth', 'user', 'payment'])->group(function () {
@@ -144,11 +148,3 @@ Route::controller(UserController::class)->prefix('user')->middleware(['auth', 'u
 Route::controller(UserController::class)->prefix('user')->group(function () {
     Route::get('accessDenied', 'accessDenied')->name('accessDenied');
 });
-
-// Route::get('admin', function () {
-//     return view('admin');
-// })->name('admin')->middleware('admin');
-
-// Route::get('user', function () {
-//     return view('user');
-// })->name('user')->middleware('user');

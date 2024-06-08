@@ -84,7 +84,7 @@
                                         <button class="btn btn-primary btn-sm"> <i class="fa fa-eye" aria-hidden="true"></i>
                                             Preview</button> </a>
 
-                                    <a href="{{ route('cyber-security.resource.update.view', [$resource->id]) }}"><button
+                                    <a href="{{ route('programming.resource.update.view', [$resource->id]) }}"><button
                                             class="btn btn-warning btn-sm mx-1"> <i class="fa fa-pencil"
                                                 aria-hidden="true"></i>Edit</button></a>
 
@@ -131,52 +131,5 @@
                 }
             });
         });
-        // document.getElementById('delete-button').addEventListener('click', function(event) {
-        //     event.preventDefault();
-        //     var url = document.getElementById('delete-link').getAttribute('data-url');
-
-        //     Swal.fire({
-        //         title: "Are you sure?",
-        //         text: "You won't be able to revert this!",
-        //         icon: "warning",
-        //         showCancelButton: true,
-        //         confirmButtonColor: "#3085d6",
-        //         cancelButtonColor: "#d33",
-        //         confirmButtonText: "Yes, delete it!"
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             // Perform the delete action
-        //             fetch(url, {
-        //                 method: 'DELETE',
-        //                 headers: {
-        //                     'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token if required
-        //                 }
-        //             }).then(response => {
-        //                 if (response.ok) {
-        //                     Swal.fire({
-        //                         title: "Deleted!",
-        //                         text: "Your file has been deleted.",
-        //                         icon: "success"
-        //                     }).then(() => {
-        //                         // Optionally, you can redirect or update the page here
-        //                         window.location.reload();
-        //                     });
-        //                 } else {
-        //                     Swal.fire({
-        //                         title: "Error!",
-        //                         text: "There was an issue deleting the file.",
-        //                         icon: "error"
-        //                     });
-        //                 }
-        //             }).catch(error => {
-        //                 Swal.fire({
-        //                     title: "Error!",
-        //                     text: "There was an issue deleting the file.",
-        //                     icon: "error"
-        //                 });
-        //             });
-        //         }
-        //     });
-        // });
     </script>
 @endsection

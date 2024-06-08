@@ -19,9 +19,10 @@
                         <div class="ico text-center">
                             <i class="fa fa-users fs-1" aria-hidden="true" style="color: #c8fc50"></i>
                             <h2>Active member</h2>
-                            <h4>{{ $activeMembers }}</h4>
+                            <h4>{{ $totalActiveMembers }}</h4>
                             <hr>
-                            <a href=""><button class="fw-bold departmentBtn">View</button></a>
+                            <a href="#active" data-bs-toggle="modal"><button
+                                class="fw-bold departmentBtn">View</button></a>
                         </div>
 
                     </div>
@@ -32,9 +33,10 @@
                         <div class="text-center">
                             <i class="fa fa-close fs-1" aria-hidden="true" style="color: #c8fc50"></i>
                             <h2>Inactive member</h2>
-                            <h4>{{ $inactiveMembers }}</h4>
+                            <h3>{{ $totalInactiveMembers }}</h3>
                             <hr>
-                            <a href=""><button class="fw-bold departmentBtn">View</button></a>
+                            <a href="#inactive" data-bs-toggle="modal"><button
+                                    class="fw-bold departmentBtn">View</button></a>
                         </div>
 
                     </div>
@@ -44,7 +46,7 @@
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="departments-card">
                         <div class="ico text-center">
-                            <i class="fa fa-dollar fs-1" aria-hidden="true" style="color: #b2fc07"></i>
+                            <i class="fa fa-folder-open fs-1" aria-hidden="true" style="color: #b2fc07"></i>
                             <h2>Resources</h2>
                             @if ($totalRescources === 0)
                                 <strong class="text-warning">Currently no resource.</strong>
@@ -53,7 +55,7 @@
                             @endif
 
                             <hr>
-                            <a href="{{ route('cyber-security.members') }}"><button
+                            <a href=""><button
                                     class="fw-bold departmentBtn">View</button></a>
                         </div>
                     </div>
@@ -99,5 +101,45 @@
 
             <h1>{{ $totalProgrammingMembers }}</h1>
             <i class="fa fa-address-book fs-2" aria-hidden="true" style="color: #8E05c2"></i>
+        </div>
+
+        <!--active members Modal HTML -->
+        <div id="active" class="modal fade">
+            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" style="background: #0b1810">
+                <div class="modal-content" style="background: #0b1810">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-warning">All active members under programming department</h5>
+                        <button type="button" class="btn-close bg-warning" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        @foreach ($activeMembers as $activeMember)
+                            <h6 class="">{{ $activeMember->registration_number }}</h6>
+                        @endforeach
+                    </div>
+                    <div class="modal-footer">
+                        {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Inactive members Modal HTML -->
+        <div id="inactive" class="modal fade">
+            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" style="background: #0b1810">
+                <div class="modal-content" style="background: #0b1810">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-warning">All inactive members under programming department</h5>
+                        <button type="button" class="btn-close bg-warning" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        @foreach ($inactiveMembers as $inactiveMember)
+                            <h6 class="">{{ $inactiveMember->registration_number }}</h6>
+                        @endforeach
+                    </div>
+                    <div class="modal-footer">
+                        {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button> --}}
+                    </div>
+                </div>
+            </div>
         </div>
     @endsection

@@ -12,6 +12,7 @@ use App\Models\Registration_number;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Rules\UniqueRegistrationNumber;
+use App\Rules\ValidRegistrationNumber;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ProgrammingController extends Controller
@@ -55,17 +56,28 @@ class ProgrammingController extends Controller
             ->count();
 
         //fetching all active members under programming department
-        $activeMembers = user::where('payment_status', 'active')
+        $totalActiveMembers = user::where('payment_status', 'active')
             ->where('category', 'programming')
-            ->where('usertype', '!=', 'root')
+            ->where('usertype', '!=', 'admin')
             ->where('id', '!=', $authicatedUser->id)
             ->count();
 
+            $activeMembers = user::where('payment_status', 'active')
+            ->where('category', 'programming')
+            ->where('usertype', '!=', 'admin')
+            ->where('id', '!=', $authicatedUser->id)
+            ->get();
+
         //fetching all inactive members under programming department
-        $inactiveMembers = user::where('payment_status', 'inactive')
+        $totalInactiveMembers = user::where('payment_status', 'inactive')
             ->where('category', 'programming')
             ->where('id', '!=', $authicatedUser->id)
             ->count();
+
+        $inactiveMembers = user::where('payment_status', 'inactive')
+            ->where('category', 'programming')
+            ->where('id', '!=', $authicatedUser->id)
+            ->get();
 
         $totalRescources = resource::all()->count();
         return view(
@@ -74,9 +86,11 @@ class ProgrammingController extends Controller
                 'programmingMembers',
                 'totalProgrammingMembers',
                 'authicatedUser',
+                'totalActiveMembers',
                 'activeMembers',
                 'inactiveMembers',
-                'totalRescources'
+                'totalRescources',
+                'totalInactiveMembers'
             )
         );
     }
@@ -87,6 +101,57 @@ class ProgrammingController extends Controller
 
         return view('admin.departments.programming.register-member');
     }
+
+    public function newProgrammingMember(Request $request)
+    {
+
+        $request->validate([
+            'registration_number' => ['required', 'unique:users', new ValidRegistrationNumber],
+            'fullname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'course' => ['required'],
+            'category' => ['required'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'registration_number.required' => 'Please enter Registration number is require',
+            'registration_number.unique' => 'Registration number already exist',
+            'fullname.required' => 'Please enter member fullname',
+            'course.required' => 'Course filled is required',
+            'category.required' => 'Please select category from the list',
+            'password.required' => 'Password filled is required'
+
+        ]);
+
+        $programmingMember = new User();
+
+        $programmingMember->registration_number = $request->registration_number;
+        $programmingMember->fullname =  $request->fullname;
+        $programmingMember->email = $request->email;
+        $programmingMember->course = $request->course;
+        $programmingMember->category = $request->category;
+        $programmingMember->password = $request->password;
+
+        alert::success('Message', 'Member successfully registered')->autoClose('6000');
+        return redirect(route('admin.departments.programming.dashboard'))->with('message', 'Member Successfully Registered');
+    }
+    public function memberUpdateView($id)
+    {
+
+        $memberInfo = User::findOrFail($id);
+        return view('admin.departments.programming.programming-member-update', compact('memberInfo'));
+    }
+    //function to update member informations
+    public function edit(Request $request, $id)
+    {
+
+        $member = User::find($id);
+
+        $member->update($request->input());
+
+        Alert::success('Message', 'Information updated successfully');
+        return redirect()->route('programming.members');
+    }
+    //return view for programming members
     public function programmingMembers()
     {
         $programmingMembers = user::where('category', 'programming')
@@ -94,7 +159,7 @@ class ProgrammingController extends Controller
             ->get();
         return view('admin.departments.programming.programming-members', compact('programmingMembers'));
     }
-    //deleting cyber security member
+    //deleting programming member
     public function memberDestroy($id)
     {
 
@@ -156,11 +221,11 @@ class ProgrammingController extends Controller
         return redirect()->back();
     }
     //particular event details
-    public function cyberEventDetails($id)
+    public function programmingEventDetails($id)
     {
 
         $eventDetails = event::findOrFail($id);
-        return view('admin.departments.programming.cyber-eventDetails', compact('eventDetails'));
+        return view('admin.departments.programming.programming-eventDetails', compact('eventDetails'));
     }
     public function eventDestroy($id)
     {
@@ -177,13 +242,13 @@ class ProgrammingController extends Controller
         $resources = resource::all()->take('2');
         return view('admin.departments.programming.post-resources', compact('resources'));
     }
-    //this function retruns the list of all resources under cyber security department
+    //this function retruns the list of all resources under programming department
     public function programmingResources()
     {
         $programmingResources = resource::all();
         return view('admin.departments.programming.programming-resources', compact('programmingResources'));
     }
-    //posting cyber security resources
+    //posting programming resources
     public function uploadResource(Request $request)
     {
         $request->validate([
@@ -246,7 +311,10 @@ class ProgrammingController extends Controller
 
         return view('admin.departments.programming.update-resource', compact('resources'));
     }
-
+    public function programmingFinancial()
+    {
+        return view('admin.departments.programming.financial');
+    }
     public function destroy($id)
     {
         $resource = Resource::findOrFail($id);
@@ -280,7 +348,7 @@ class ProgrammingController extends Controller
         Alert::success('Message', 'Comment deleted successfully')->autoClose('5000');
         return redirect()->back();
     }
-    //here department registers member registration before member sign up
+    //here department registers member registration before member sign up.
     public function store(Request $request)
     {
         $validatedData = $request->validate([

@@ -78,10 +78,34 @@
                     {{-- <li>{{ Auth::user()->fullname }}</li> --}}
                 </ul>
 
-                <div class="btn btn-group d-none d-md-block ">
-                    <button class="btn btn-secondary btn-sm">{{ Auth::user()->fullname }}</button>
-                    <button class="btn btn-secondary btn-sm"></button>
+
+                <div class="btn-group d-none d-sm-block ">
+                    <button type="button" class="btn btn-secondary "> {{ Auth::user()->fullname }}</button>
+                    <button type="button" class="btn btn-secondary  dropdown-toggle dropdown-toggle-split"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">coding</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <a class="dropdown-item" href="">
+                            {{ __('Profile') }}
+                        </a>
+
+                        <a class="dropdown-item" href="">
+                            {{ __('Setting') }}
+                        </a>
+                        <hr>
+
+                        {{-- <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form> --}}
+                    </ul>
                 </div>
+
                 <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                     <span class="navbar-toggler-icon"></span>
@@ -191,27 +215,6 @@
             });
         });
     </script>
-
-
-    {{-- <script>
-        document.getElementById('delete-button').addEventListener('click', function(event) {
-            event.preventDefault();
-
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this action!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#dc3545",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            });
-        });
-    </script> --}}
 
     <script>
         const activeMembersBtn = document.querySelector('.activeMembersBtn')
