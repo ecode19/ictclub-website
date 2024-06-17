@@ -1,9 +1,8 @@
-@extends('layouts.admin')
+@extends('layouts.cyber-security')
 @section('content')
-        @include('sweetalert::alert')
-        @include('admin.message')
+        {{-- @include('admin.message') --}}
         <div class="container">
-            <form class="mx-5 mt-5" action="{{ route('edit', $members->id) }}" method="post" autocomplete="off">
+            <form class="mx-5 mt-5" action="{{ route('cyber-security.member.edit', $members->id) }}" method="post" autocomplete="off">
                 @csrf
                 @method('put')
                 <h5 class="text-primary fs-3">Update Member Informations</h5>
@@ -67,21 +66,6 @@
                         </select>
                          <span class="text-danger">
                             @error('category')
-                                {{ $message }}
-                            @enderror
-                        </span>
-                    </div>
-
-                    <div class="col-12 col-md-12 col-lg-6 mb-3">
-                        <label for="usertype" class="fw-bold form-label">Usertype</label>
-                        <select class="form-select form-select-lg" aria-label=".form-select-lg example"
-                            name="usertype">
-                            <option value="{{ $members->usertype }}">{{ $members->usertype }}</option>
-                            <option value="user">user</option>
-                            <option value="admin">admin</option>
-                        </select>
-                         <span class="text-danger">
-                            @error('usertype')
                                 {{ $message }}
                             @enderror
                         </span>

@@ -144,7 +144,7 @@
     </section>
     <div class="container">
         <div class="alert alert-warning" role="alert">
-            <p> <strong> NOTE: </strong> For Any Missing or incorrect information please Contact, <strong>Mr: Mwauyemba
+            <p> <strong> NOTE: </strong> For Any Missing or incorrect information please Contact, <strong>Mr: Mahuyemba
                 </strong></p>
         </div>
     </div>

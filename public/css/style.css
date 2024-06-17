@@ -656,9 +656,10 @@ h4 {
 }
 /* for website footer section */
 .footer-container {
-    background-image: linear-gradient(rgba(6, 113, 184, 0.8), #0671b8),
+    background-image: linear-gradient(to bottom, #033392, #4a649b),
         url("/img/uni.jpg");
     background-size: cover;
+    border: none;
     background-position: center;
     height: auto;
     width: 100%;

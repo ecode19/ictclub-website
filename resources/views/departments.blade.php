@@ -11,14 +11,6 @@
                                 Get Benefited</h4>
                         </center>
                     </div>
-
-                    <div class="departmets">
-                        <center>
-                            <h4 class="display-1 fw-bold py-5 mt-5 fw-bold" data-aos="zoom-in" data-aos-duration="3000"
-                                style="color: #50f18b;">
-                                Get Benefited two098765</h4>
-                        </center>
-                    </div>
                 </div>
 
             </div>

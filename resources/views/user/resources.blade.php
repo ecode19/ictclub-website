@@ -1,7 +1,8 @@
 @extends('layouts.user')
 @section('content')
     <div class="container mt-5">
-        <h2 class="colorIcon">Resources Panel</h2>
+        <h2 class="text-secondary">Resources Panel</h2>
+        <hr>
         @if ($resources->count() > 0)
             <div class="row">
                 @foreach ($resources as $resource)
@@ -23,11 +24,9 @@
                                     <small class="text-warning">Category: {{ $resource->category }}</small>
                                 </div>
                                 <div class="mt-3">
-                                <button class="btn btn-outline-warning ">
-                                    <a class="text-decoration-none "
-                                        href="{{ route('resource.preview', $resource->file_path) }}"
-                                        target="_blank">preview</a>
-                                </button>
+                                    <a href="{{ route('resource.preview', $resource->file_name) }}">
+                                        <button class="btn btn-warning">preview</button>
+                                    </a>
                                 </div>
                             </div>
 

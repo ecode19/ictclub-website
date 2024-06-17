@@ -2,8 +2,8 @@
 @section('content')
         @include('admin.message')
         <div class="container">
-            <a href="{{ route('admin.register.member') }}"><button class="btn btn-primary btn-sm mx-5 mt-3 text-sm-end"> <i class="fa fa-user-plus" aria-hidden="true"></i> Add New</button></a>
             <h1 class="text-primary text-center">Mwecau ICT Club Members </h1>
+            <a href="{{ route('admin.register.member') }}"><button class="btn btn-primary btn-sm mx-5 mt-3 mb-4 text-sm-end"> <i class="fa fa-user-plus" aria-hidden="true"></i> Add New</button></a>
             <table id="memberTable"
                 class=" shadow-lg table table-secondary table-hover table-bordered table-striped table-center">
                 <thead>
@@ -28,7 +28,7 @@
                                 <td>{{ $members->usertype }}</td>
                                 <td>{{ $members->created_at }}</td>
                                 <td>
-                                    <a class="btn btn-warning" href="{{ route('update', ['id' => $members->id]) }}">
+                                    <a class="btn btn-warning btn-sm" href="{{ route('update', ['id' => $members->id]) }}">
                                         <i class="fa fa-pencil" aria-hidden="true"></i>
                                     </a>
                                     <form method="POST" action="{{ route('destroy.member', [$members->id]) }}"

@@ -81,8 +81,9 @@
 {{-- @endsection --}}
 
 <!--End Navbar-->
-
-@include('links')
+@extends('layouts.web')
+@section('content')
+{{-- @include('links') --}}
 <section class="" style="background: linear-gradient(to right, #012499, #011033);">
     @include('sweetalert::alert')
     <div class="container">
@@ -168,10 +169,11 @@
             </div>
         </div>
     </div>
-    <footer class="text-dark">
+    {{-- <footer class="text-dark">
         <div class="container-fluid">
             <p class="text-center text-light"> Copyright <i class="far fa-copyright text-warning"></i> 2023 Ecode
                 Technologies</p>
-        </div>
+        </div> --}}
     </footer>
 </section>
+@endsection

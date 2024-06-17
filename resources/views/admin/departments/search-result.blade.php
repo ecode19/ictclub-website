@@ -22,3 +22,22 @@
         <h1 class="text-warning mt-4">Total found: <strong>{{ $totalResults }}</strong></h1>
     </div>
 @endsection
+
+// Processing file
+if ($request->hasFile('file')) {
+    $file = $request->file('file');
+    $fileName = time() . "_" . $file->getClientOriginalName();
+
+    // Storing the uploaded file in storage/app/public/uploads/pdfs
+    $filePath = 'public/uploads/pdfs/' . $fileName;
+    $file->storeAs('public/uploads/pdfs', $fileName);
+
+    // Check for existing file and delete it
+    $existingFilePath = 'public/uploads/pdfs/' . $user->file;
+    if (Storage::exists($existingFilePath)) {
+        Storage::delete($existingFilePath);
+    }
+
+    // Update user file
+    $user->file = $fileName;
+}

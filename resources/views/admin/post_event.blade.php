@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <div class="container mt-5">
-        <h2 class="text-dark">Event Management</h2>
+        <h2 class="colorIcon">Event Management</h2>
         <hr>
         <div class="text-end">
             <a href="{{ route('events') }}" class="text-primary text-decoration-none"> <button class="btn btn-primary">views
@@ -55,7 +55,7 @@
                     </span>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-success color mt-3 mb-3">Create Event</button>
+            <button type="submit" class="btn btn-success color mt-3 mb-3"> <i class="fa fa-save" aria-hidden="true"></i> Create Event</button>
         </form>
     </div>
 @endsection

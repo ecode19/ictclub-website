@@ -1,8 +1,9 @@
-@extends('layouts.cyber-security')
+@extends('layouts.graphics-designing')
 @section('content')
     <div class="container mt-5">
-        <h2 class="colorIcon">Resources Management Panel</h2>
-        <form action="{{ route('cyber-security.upload.resource') }}" method="post" enctype="multipart/form-data">
+        <h2 class="">Resources Management Panel</h2>
+        <hr>
+        <form action="{{ route('graphics.upload.resource') }}" method="post" enctype="multipart/form-data">
             @method('post')
             @csrf
             <div class="form-group">
@@ -80,11 +81,11 @@
                                 <div class="card-text text-dark">{{ $resource->description }}</div>
                                 <div class="mt-3 d-flex">
 
-                                    <a href="{{ route('cyber-security.resource.preview', $resource->file_name) }}" target="_blank">
+                                    <a href="{{ route('admin.document.preview', $resource->file_path) }}" target="_blank">
                                         <button class="btn btn-primary btn-sm"> <i class="fa fa-eye" aria-hidden="true"></i>
                                             Preview</button> </a>
 
-                                    <a href="{{ route('cyber-security.resource.update.view', [$resource->id]) }}"><button
+                                    <a href="{{ route('programming.resource.update.view', [$resource->id]) }}"><button
                                             class="btn btn-warning btn-sm mx-1"> <i class="fa fa-pencil"
                                                 aria-hidden="true"></i>Edit</button></a>
 
@@ -103,7 +104,7 @@
                 @endforeach
 
                 <div class="text-end mt-3">
-                    <a href="{{ route('cyber-security.resource.view') }}">
+                    <a href="{{ route('graphics.resource.view') }}">
                         <button class="btn btn-primary btn-sm">view Available resources</button>
                     </a>
                 </div>
@@ -131,52 +132,5 @@
                 }
             });
         });
-        // document.getElementById('delete-button').addEventListener('click', function(event) {
-        //     event.preventDefault();
-        //     var url = document.getElementById('delete-link').getAttribute('data-url');
-
-        //     Swal.fire({
-        //         title: "Are you sure?",
-        //         text: "You won't be able to revert this!",
-        //         icon: "warning",
-        //         showCancelButton: true,
-        //         confirmButtonColor: "#3085d6",
-        //         cancelButtonColor: "#d33",
-        //         confirmButtonText: "Yes, delete it!"
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             // Perform the delete action
-        //             fetch(url, {
-        //                 method: 'DELETE',
-        //                 headers: {
-        //                     'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token if required
-        //                 }
-        //             }).then(response => {
-        //                 if (response.ok) {
-        //                     Swal.fire({
-        //                         title: "Deleted!",
-        //                         text: "Your file has been deleted.",
-        //                         icon: "success"
-        //                     }).then(() => {
-        //                         // Optionally, you can redirect or update the page here
-        //                         window.location.reload();
-        //                     });
-        //                 } else {
-        //                     Swal.fire({
-        //                         title: "Error!",
-        //                         text: "There was an issue deleting the file.",
-        //                         icon: "error"
-        //                     });
-        //                 }
-        //             }).catch(error => {
-        //                 Swal.fire({
-        //                     title: "Error!",
-        //                     text: "There was an issue deleting the file.",
-        //                     icon: "error"
-        //                 });
-        //             });
-        //         }
-        //     });
-        // });
     </script>
 @endsection

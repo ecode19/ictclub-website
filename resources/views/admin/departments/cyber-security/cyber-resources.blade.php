@@ -15,7 +15,7 @@
                                 <div class="card-text text-dark">{{ $resource->description }}</div>
                                 <div class="mt-3 d-flex">
 
-                                    <a href="{{ route('admin.document.preview', $resource->file_path) }}" target="_blank">
+                                    <a href="{{ route('cyber-security.resource.preview', $resource->file_name) }}" target="_blank">
                                         <button class="btn btn-primary btn-sm"> <i class="fa fa-eye" aria-hidden="true"></i>
                                             Preview</button> </a>
 

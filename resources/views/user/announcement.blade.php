@@ -19,8 +19,8 @@
     </style>
 
     <div class="container mt-5">
-        <h2 class="text-dark">Announcements</h2>
-
+        <h2 class="text-secondary">Announcements</h2>
+<hr>
     </div>
 
     <div class="container ">

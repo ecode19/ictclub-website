@@ -1,7 +1,8 @@
 @extends('layouts.cyber-security')
 @section('content')
     <div class="container mt-5">
-        <h4 class="text-center text-uppercase fw-bold">Cyber security Members</h4>
+        <h4 class="text-center text-uppercase fw-bold text-secondary">Cyber security Members</h4>
+        <hr>
         <div class="text-end mb-3">
             <a href="{{ route('cyber-security.register.member') }}">
                 <button class="btn btn-primary btn-sm fw-bold"> <i class="fa fa-plus fw-bold" aria-hidden="true"></i>
@@ -39,7 +40,7 @@
                                     <td>{{ $cyberSecurityMember->category }}</td>
 
                                     <td>
-                                        <a href="">
+                                        <a href="{{ route('cyber-security.member.update', $cyberSecurityMember->id) }}">
                                             <button class="btn btn-warning btn-sm mx-2"><i class="fa fa-eye"
                                                     aria-hidden="true"></i></button>
                                         </a>
@@ -89,7 +90,7 @@
                                     <td>{{ $cyberSecurityMember->category }}</td>
 
                                     <td>
-                                        <a href="">
+                                        <a href="{{ route('cyber-security.member.update', $cyberSecurityMember->id) }}">
                                             <button class="btn btn-warning btn-sm mx-2"> <i class="fa fa-eye"
                                                     aria-hidden="true"></i></button>
                                         </a>

@@ -1,7 +1,7 @@
-@extends('layouts.programming')
+@extends('layouts.graphics-designing')
 @section('content')
     <div class="container">
-        <form class="mx-5 mt-5" action="{{ route('programming.member.edit', $memberInfo->id) }}" method="post" autocomplete="off">
+        <form class="mx-5 mt-5" action="{{ route('graphics.update.member.info', $memberInfo->id) }}" method="post" autocomplete="off">
             @csrf
             @method('put')
             <h5 class="text-secondary fs-3">Update Member Informations</h5>
@@ -67,8 +67,8 @@
                     </span>
                 </div>
             </div>
-            <button type="submit" name="update" class="btn btn-warning text-dark fw-bold"> <i class="fa fa-save"
-                    aria-hidden="true"></i> Update</button>
+            <button type="submit" name="update" class="btn btn-warning text-dark"> <i class="fa fa-save"
+                    aria-hidden="true"></i> Save</button>
         </form>
     </div>
 @endsection

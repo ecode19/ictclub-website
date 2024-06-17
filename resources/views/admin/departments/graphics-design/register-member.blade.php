@@ -1,11 +1,11 @@
-@extends('layouts.cyber-security')
+@extends('layouts.graphics-designing')
 @section('content')
     <div class="container">
-        <form class="mx-5 mt-5" action="{{ route('cyber-security.new.member') }}" method="post" autocomplete="off" enctype="multipart/form-data">
+        <form class="mx-5 mt-5" action="{{ route('new.graphics.member') }}" method="post" enctype="multipart/form-data" autocomplete="off">
             @csrf
             @method('POST')
             {{-- @include('admin.message') --}}
-            <h4 class="text-secondary">Register cyber security member</h4>
+            <h4 class="text-secondary">Register Graphics member</h4>
             <hr>
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-6 mb-4">
@@ -67,8 +67,8 @@
                 </div>
                 <div class="col-12 col-md-12 col-lg-6">
                     <label class="mb-2" for="category">Category</label>
-                    <select class="form-select" name="category" aria-readonly="true">
-                        <option value="cyber security">Cyber Security</option>
+                    <select class="form-select " name="category" readonly="true">
+                        <option value="graphics designing">graphics gesigning</option>
                     </select>
                 </div>
                 <div class="col-12 col-md-12 col-lg-6 mb-4">
@@ -99,6 +99,4 @@
 
 
     </div>
-
-
 @endsection

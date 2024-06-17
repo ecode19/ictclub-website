@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CyberSecurityController;
+use App\Http\Controllers\GraphicsDesigningController;
 use App\Http\Controllers\ProgrammingController;
 
 /*
@@ -27,7 +28,7 @@ Route::get('/', function () {
 Auth::routes(['verify' => true]);
 
 
-Auth::routes();
+// Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/users', [App\Http\Controllers\HomeController::class, 'getAllUsers'])->name('get.AllUsers');
@@ -44,7 +45,12 @@ Route::get('/licence and use', [App\Http\Controllers\HomeController::class, 'lic
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 
 // Defining super Admin Routes
-Route::controller(AdminController::class)->prefix('admin')->middleware('admin')->group(function () {
+Route::controller(AdminController::class)->prefix('admin')->group(function () {
+//pdfs
+Route::get('/all-members', 'allRegisteredMembersPDF')->name('all.registered.members');
+    Route::get('/assign-admin', 'showAssignForm')->name('showAssignForm');
+    Route::post('/assign-admin', 'assignAdmin')->name('assignAdmin');
+    Route::delete('/delete-admin/{id}', 'deleteAdmin')->name('delete.admin');
     Route::get('AdminDashboard', 'Dashboard')->name('AdminDashboard');
     Route::get('comments', 'comments')->name('admin.comments');
     Route::delete('/comment-destroty{id}', 'commentDestroy')->name('admin.destroy.comment');
@@ -52,20 +58,25 @@ Route::controller(AdminController::class)->prefix('admin')->middleware('admin')-
     Route::get('add_Member', 'addMember')->name('admin.register.member');
     Route::delete('/delete/member/{id}', 'memberDestroy')->name('destroy.member');
     Route::get('resource_repository', 'Repository')->name('resource_repository');
-
+    //super admin resource routes
     Route::post('storeResource', 'storeResource')->name('storeResource');
     Route::post('uploadResource', 'uploadResource')->name('admin.upload.resources');
     Route::get('preview/{file}', 'documentPreview')->name('admin.document.preview');
-
+    route::delete('/delete/resource/{id}', 'destroy')->name('resource.destroy');
     Route::get('member_list', 'memberList')->name('member_list');
+    //super admin department routes
     Route::get('departments', 'departments')->name('departments');
     Route::get('add_department', 'addDepartment')->name('add_department');
+    route::delete('/admin/delete-department/{id}', 'departmentDestroy')->name('admin.department.destroy');
+
     Route::get('update/{id}', 'update')->name('update');
     Route::put('edit/{id}', 'edit')->name('edit');
     Route::post('eventUpload', 'eventUpload')->name('eventUpload');
     Route::get('events', 'events')->name('events');
     Route::post('newDepartment', 'newDepartment')->name('newDepartment');
     Route::post('newMember', 'newMember')->name('newMember');
+    //financial related routes
+    Route::get('/financial-panel', 'financialPanel')->name('admin.financial.panel');
 });
 
 // Defining programming admin Routes
@@ -76,8 +87,10 @@ Route::controller(ProgrammingController::class)->prefix('admin/departments')->mi
     Route::post('/register-programming-member', 'newProgrammingMember')->name('new.programming.member');
     Route::get('/programming/programming-members', 'programmingMembers')->name('programming.members');
     Route::get('/programming/registration-numbers', 'registerNumbers')->name('programming.register.number');
-    Route::get('/programming/update-member-details/{id}', 'memberUpdateView')->name('programming.update.member.view');
-    Route::put('/edit/informations/{id}', 'edit')->name('update.member.info');
+
+    Route::get('/programming/update/{id}', 'memberUpdateView')->name('programming.member.update');
+    Route::put('/programming/edit/{id}', 'edit')->name('programming.member.edit');
+
     Route::delete('/programming-member/delete/{id}', 'memberDestroy')->name('programming.member.delete');
     //programming routes related to event
     Route::get('/programming/create-event', 'createEvent')->name('programming.create.event');
@@ -87,11 +100,12 @@ Route::controller(ProgrammingController::class)->prefix('admin/departments')->mi
     //programming routes related to resources
     Route::get('/programming/post-resources', 'resources')->name('programming.post-resources');
     Route::post('/programming-upload-resource', 'uploadResource')->name('programming.upload.resource');
+    Route::get('/programming/preview/{file}', 'documentPreview')->name('programming.resource.preview');
     Route::get('/programming/update-resource/{id}', 'resourceUpdateView')->name('programming.resource.update.view');
     Route::get('/programming/programming-resources', 'programmingResources')->name('programming.resource.view');
     route::delete('/delete/resource/{id}', 'destroy')->name('resource.destroy');
     //programming routes related to finance
-    route::get('/department-financial-panel', 'programmingFinancial')->name('programming.financial.panel');
+    route::get('/programming/department-financial-panel', 'programmingFinancial')->name('programming.financial.panel');
     //programming routes related to messages from website users
     Route::get('/programming-messages', 'programmingMessages')->name('programming.messages');
     Route::delete('/programming/message-destroty{id}', 'messageDestroy')->name('programming.message.destroy');
@@ -107,7 +121,12 @@ Route::controller(CyberSecurityController::class)->prefix('admin/departments')->
     Route::get('/cyber-security/dashboard', 'cyberSecurityDepartment')->name('cyberSecurity.department');
     //cyber security routes related to cyber member
     Route::get('/cyber-security/register-member', 'register')->name('cyber-security.register.member');
+    route::post('/cyber-security/register-member', 'newCyberMember')->name('cyber-security.new.member');
     Route::get('/cyber-security/cyber-security-members', 'cyberMembers')->name('cyber-security.members');
+
+    Route::get('/cyber-security/update/{id}', 'update')->name('cyber-security.member.update');
+    Route::put('cyber-security/edit/{id}', 'edit')->name('cyber-security.member.edit');
+
     Route::get('/cyber-security/registration-numbers', 'registerNumbers')->name('cyber-security.register.number');
     Route::delete('/delete/member/{id}', 'memberDestroy')->name('cyber-security.member.destroy');
     //cyber security related to cyber event
@@ -118,13 +137,54 @@ Route::controller(CyberSecurityController::class)->prefix('admin/departments')->
     //cyber security routes related to cyber resources
     Route::get('/cyber-security/post-resources', 'resources')->name('cyber-security.post-resources');
     Route::post('/uploading-cyber-resource', 'uploadResource')->name('cyber-security.upload.resource');
+    Route::get('/cyber-security/preview/{file}', 'documentPreview')->name('cyber-security.resource.preview');
     Route::get('/cyber-security/update-resource/{id}', 'resourceUpdateView')->name('cyber-security.resource.update.view');
     Route::get('/cyber-security/cyber-resources', 'cyberResources')->name('cyber-security.resource.view');
+    //programming routes related to finance
+    route::get('/cyber-security/department-financial-panel', 'cyberFinancial')->name('cyber-security.financial.panel');
     route::delete('/delete/resource/{id}', 'destroy')->name('resource.destroy');
     //cyber security routes related to messages from website users
     Route::get('/cyberSecurity-messages', 'cyberMessages')->name('cyber-security.messages');
     Route::delete('/cyber-security/message-destroty{id}', 'messageDestroy')->name('cyber-security.message.destroy');
     Route::get('/name/search', 'searchByRegNumber')->name('names.search');
+});
+
+// Defining Graphics and Designing admin Routes
+Route::controller(GraphicsDesigningController::class)->prefix('admin/departments')->middleware('auth')->group(function () {
+    Route::get('graphics-designing/dashboard', 'graphicsDepartment')->name('graphics.dashboard');
+    //Graphics and Designing member routes
+    Route::get('/graphics/register-member', 'register')->name('graphics.register.member');
+    Route::post('/register-graphics-member', 'newGraphicsgMember')->name('new.graphics.member');
+    Route::get('/graphics/graphics-members', 'graphicsMembers')->name('graphics.members');
+    Route::get('/graphics/registration-numbers', 'registerNumbers')->name('graphics.register.number');
+    Route::get('/graphics/update-member-details/{id}', 'memberUpdateView')->name('graphics.update.member.view');
+    Route::put('/edit/informations/{id}', 'edit')->name('graphics.update.member.info');
+    Route::delete('/graphics-member/delete/{id}', 'memberDestroy')->name('graphics.member.delete');
+    //Graphics and designing routes related to event
+    Route::get('/graphics/create-event', 'createEvent')->name('graphics.create.event');
+    Route::post('/graphics/post-event', 'eventUpload')->name('graphics.postEvent');
+    Route::get('/graphics/event-details/{id}', 'graphicsEventDetails')->name('graphics.event.details');
+    Route::delete('/graphics/event/{id}', 'eventDestroy')->name(('graphics.destroy.event'));
+    //Graphics and Designing routes related to resources
+    Route::get('/graphics/post-resources', 'resources')->name('graphics.post-resources');
+    Route::post('/graphics-upload-resource', 'uploadResource')->name('graphics.upload.resource');
+    Route::get('/graphics/update-resource/{id}', 'resourceUpdateView')->name('graphics.resource.update.view');
+    Route::get('/graphics/graphics-resources', 'graphicsResources')->name('graphics.resource.view');
+    Route::put('/update-resource/{id}', 'updateResourceInfo')->name('graphics.update.resource');
+    route::delete('/delete/resource/{id}', 'destroy')->name('resource.destroy');
+    //Graphics and Designing routes related to finance
+    route::get('/department-financial-panel', 'graphicsFinancial')->name('graphics.financial.panel');
+    //Graphics and Designing routes related to messages from website users
+    Route::get('/graphics-messages', 'graphicsMessages')->name('graphics.messages');
+    Route::delete('/graphics/message-destroty{id}', 'messageDestroy')->name('graphics.message.destroy');
+    Route::get('/name/search', 'searchByRegNumber')->name('names.search');
+    //document preview
+    Route::get('preview/{file}', 'documentPreview')->name('graphics.resource.preview');
+
+    // Route::get('/name/search', 'searchByRegNumber')->name('names.search');
+    // Route::get('/cyber-security/registration-numbers', 'registerNumbers')->middleware('cyber-security')->name('cyber-security.register.number');
+
+    Route::post('/store', 'store')->name('store'); ///storing registration numbers
 });
 
 // Defining user Routes

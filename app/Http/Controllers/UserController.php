@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\resource;
 use App\Models\user;
 use App\Models\event;
+use App\Models\resource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('verified');
+    }
     public function Dashboard()
     {
         $authenticatedUser = Auth::user();
@@ -107,28 +112,44 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-        //        dd($request->all());
+        // Validate the request
         $request->validate([
-            'profile_picture' => 'image|mimes:jpeg,png,jpg,gif|max:9048',
+            'profile_picture' => 'image|mimes:png|max:1024',
+        ], [
+            'profile_picture.max' => 'Profile picture should not exceed 1MB'
         ]);
 
-        //Retrieve the authenticated user
+        // Retrieve the authenticated user
         $user = auth()->user();
 
         // Processing file
         if ($request->hasFile('profile_picture')) {
             $image = $request->file('profile_picture');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+            // Move the new file
             $image->move(public_path('images/profilePictures'), $imageName);
 
-            // Update the user's profile picture in the database
-            $user->update([
-                'profile_picture' => $imageName,
-            ]);
+            // Check for existing profile picture and delete it
+            $existingProfilePicture = public_path('images/profilePictures' . DIRECTORY_SEPARATOR . $user->profile_picture);
+            if (File::exists($existingProfilePicture)) {
+                File::delete($existingProfilePicture);
+            }
+
+            // Update user profile picture
+            $user->profile_picture = $imageName;
         }
 
-        return redirect()->route('member.dashboard')->with('success', 'Profile updated successfully');
+        // Save the user
+        $user->save();
+
+        // Show success alert
+        toast('Profile picture successfully updated', 'success')->position('bottom-start')->autoClose('5000');
+
+        // Redirect with success message
+        return redirect()->route('member.dashboard');
     }
+
 
     public function discusionForum()
     {

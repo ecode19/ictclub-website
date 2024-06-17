@@ -2,21 +2,70 @@
 
 namespace App\Http\Controllers;
 
+use Imagick;
+use DataTables;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Dompdf\Image\ImageLoader;
 use App\Models\User;
+use App\Models\admin;
 use App\Models\event;
+use App\Models\Comment;
 use App\Models\resource;
 use App\Models\department;
-use App\Models\Comment;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
-use DataTables;
-use Dompddf\Dompdf;
-use Dompdf\Options;
-use Imagick;
+use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AdminController extends Controller
 {
+    public function showAssignForm()
+    {
+        $authenticatedUser = Auth::User();
+        $users = User::all();
+        $departments = department::all();
+        return view('admin/assign-admin', compact('users', 'departments', 'authenticatedUser'));
+    }
+
+    public function assignAdmin(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id|unique:admins',
+            'department_id' => 'required|exists:departments,id',
+        ], [
+            'user_id.unique' => 'This member is already an admin and has a department assigned. If you want to assign another department to this user, please delete the existing assignment first and then assign the new department.'
+        ]);
+
+        $user = User::find($request->user_id);
+        $admin = new admin();
+        $admin->user_id = $user->id;
+        $admin->department_id = $request->department_id;
+
+        //reset usertype to admin
+        $user->usertype = 'admin';
+        $user->save();
+        //saving admins records
+        $admin->save();
+        Alert::success('Message', 'Admin assigned successfully');
+        return redirect()->route('showAssignForm')->with('success', 'Admin assigned successfully!');
+    }
+
+    public function deleteAdmin($id)
+    {
+        // Find the admin record using the provided ID
+        $admin = admin::findOrFail($id);
+        // Find the associated user using the user_id from the admin record
+        $user = User::findOrFail($admin->user_id);
+        // Reset the usertype to 'user'
+        $user->usertype = 'user';
+        $user->save();
+        // Delete the admin record
+        $admin->delete();
+        Alert::success('Message', 'Admin deleted successfully');
+        return redirect()->back();
+    }
 
     //Defining Admin Methods
     public function Dashboard()
@@ -28,7 +77,15 @@ class AdminController extends Controller
         $inactiveMembers = user::where('payment_status', 'inactive')->count(); //fetching all inactive members
         $totalDepartments = Department::all()->count();
         $members = User::where('id', '!=', $authenticatedAdmin->id)->get();
-        return view('admin/AdminDashboard', compact('adminName', 'allMembers', 'activeMembers', 'inactiveMembers', 'members', 'totalDepartments', 'authenticatedAdmin'));
+        return view('admin/AdminDashboard', compact(
+            'adminName',
+            'allMembers',
+            'activeMembers',
+            'inactiveMembers',
+            'members',
+            'totalDepartments',
+            'authenticatedAdmin',
+        ));
     }
 
     // yajra datatables functionalities not completed
@@ -85,7 +142,7 @@ class AdminController extends Controller
     //messages from website
     public function comments()
     {
-        $comments = Comment::where('category', 'cyber_security')->get();
+        $comments = Comment::all();
         return view('admin/comments', compact('comments'));
     }
     //deleting message
@@ -103,7 +160,7 @@ class AdminController extends Controller
     public function Repository()
     {
 
-        $resources = Resource::all();
+        $resources = Resource::latest()->Limit(3)->get();
         return view('admin/resource_repository', compact('resources'));
     }
 
@@ -153,22 +210,18 @@ class AdminController extends Controller
         ]);
 
 
-        //file proccessing
+        //PROCESSING A THUMBNAIL
         if ($request->hasFile('thumbnail')) {
             $thumbnail = $request->file('thumbnail');
-            $thumbnailName = time() . '_' . $thumbnail->getClientOriginalName();
+            $thumbnailName = $thumbnail->getClientOriginalName();
             $thumbnail->move(public_path('images/resourcesThumbnails/'), $thumbnailName);
         }
 
-        //get the uploaded file
+        //PROCESSING AND STORING A PDF FILE
         $file = $request->file('file');
-
-        //generating unique name of the uploaded file
         $fileName = time() . "_" . $file->getClientOriginalName();
+        $filePath = $file->storeAs('public/uploads/pdfs', $fileName);
 
-        //storing the uploaded file in storage/app/public/uploads/pdfs
-        $file->storeAs('public/uploads/pdfs', $fileName);
-        // $file->storeAs('public', $fileName);
 
         //saving the information on to the database
         $newResource = new resource();
@@ -176,8 +229,8 @@ class AdminController extends Controller
         $newResource->title = $request->title;
         $newResource->description = $request->description;
         $newResource->category = $request->category;
-        $newResource->file_name = $file->getClientOriginalName();
-        $newResource->file_path = $fileName;
+        $newResource->file_name = $fileName;
+        $newResource->file_path = $filePath;
         $newResource->thumbnail = $thumbnailName;
 
         $newResource->save();
@@ -185,27 +238,36 @@ class AdminController extends Controller
         Alert::success('Ujumbe', 'Mchakato Umefanikiwa');
         return redirect()->back();
     }
+    public function destroy($id)
+    {
+        $resource = Resource::findOrFail($id);
 
+        // Delete the file from storage if it exists
+        if (Storage::exists($resource->file_path)) {
+            Storage::delete($resource->file_path);
+        }
 
-    //previewing uploaded files
+        // Delete the resource record from the database
+        $resource->delete();
+
+        Alert::success('Message', 'Selected resource has been deleted successfully');
+        return redirect()->back();
+    }
     public function documentPreview($fileName)
     {
-
-        $document = resource::where('file_path', $fileName)->first();
+        // Ensure you are fetching the document using the correct field
+        $document = Resource::where('file_name', $fileName)->first();
 
         if (!$document) {
-
-            Alert::error('Message', 'something went wrong');
+            Alert::error('Message', 'Something went wrong');
             return redirect()->back();
         }
 
-        //getting the storage path for our document file
-
+        // Get the storage path for the document file
         $filePath = storage_path('app/public/uploads/pdfs/' . $fileName);
 
         if (!file_exists($filePath)) {
-
-            Alert::error('Message', 'Document does not exist in our server');
+            Alert::error('Message', 'Document does not exist on our server');
             return redirect()->back();
         }
 
@@ -280,12 +342,17 @@ class AdminController extends Controller
 
     public function departments()
     {
-
-        $departments = Department::where('dept_name', '!=', 'root')->get();
-
-        return view('admin/departments', compact('departments'));
+        $departments = Department::with('admins.user')->where('dept_name', '!=', 'root')->get();
+        return view('admin.departments', compact('departments'));
     }
+    public function departmentDestroy($id)
+    {
+        $departmentDestroy = department::findOrFail($id);
+        $departmentDestroy->delete();
 
+        Alert::success('Message', 'Department Successfully deleted');
+        return redirect()->back();
+    }
     public function addDepartment(Request $request)
     {
 
@@ -298,12 +365,18 @@ class AdminController extends Controller
         $request->validate([
             'dept_name' => ['required', 'unique:departments'],
             'dept_description' => ['required', 'string'],
+        ], [
+            'dept_name.required' => 'Please enter Department name',
+            'dept_name.unique' => 'The department is already registered',
+            'dept_description.required' => 'Please enter department description',
         ]);
 
-        department::create([
-            'dept_name' => $request->input('dept_name'),
-            'dept_description' => $request->input('dept_description'),
-        ]);
+        $newDepartment = new department();
+
+        $newDepartment->dept_name = $request->dept_name;
+        $newDepartment->dept_description = $request->dept_description;
+
+        $newDepartment->save();
 
         return redirect(route('departments'))->with('message', 'New Department Added');
     }
@@ -361,5 +434,71 @@ class AdminController extends Controller
         $events = Event::all();
 
         return view('admin/events', compact('events'));
+    }
+    public function financialPanel()
+    {
+        return view('admin.financial');
+    }
+    public function allRegisteredMembersPDF()
+    {
+        $users = User::all();
+        $totalNumber = User::all()->count();
+        $currentDateTime = now()->format('Y-m-d');
+        $authenticatedUser = Auth::user()->fullname;
+
+        $htmlContent = '<h3 style="text-align: center;">All ICT CLUB REGISTERED MEMBERS</h3>';
+        $htmlContent .= '<table border="1" style="border-collapse: collapse; width: 100%; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;">';
+        $htmlContent .= '<thead style="background-color: #d8c9f3;">';
+        $htmlContent .= '<tr>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">S/N</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Name</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">REGISTRATION NUMBER</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">DATE REGISTERED</th>';
+        $htmlContent .= '</tr>';
+        $htmlContent .= '</thead>';
+        $htmlContent .= '<tbody>';
+
+        $counter = 1;
+        foreach ($users as $user) {
+            $htmlContent .= '<tr>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $counter++ . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $user->fullname . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $user->registration_number . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $user->created_at->format('Y-m-d') . '</td>';
+            $htmlContent .= '</tr>';
+        }
+
+        $htmlContent .= '</tbody>';
+        $htmlContent .= '</table>';
+
+        // Add text below the table
+        $htmlContent .= '<p><strong>Total: </strong> </strong>' . $totalNumber . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px; margin-top: 10px;">Printed on: ' . $currentDateTime . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px;">Printed by: ' . $authenticatedUser . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-weight: bold; margin-top: 20px;">Mwecau ICT Club</p>';
+
+        $pdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $pdf->setOptions($options);
+
+        $pdf->loadHtml($htmlContent);
+
+
+        $pdf->render();
+
+        // Add watermark as image
+        $canvas = $pdf->getCanvas();
+        $imagePath = public_path('img/mwecau.png'); // Adjust path to your watermark image
+        $imgWidth = 200; // Adjust the width of the watermark
+        $imgHeight = 200; // Adjust the height of the watermark
+        $canvas->set_opacity(0.3, "Multiply"); // Set the opacity of the watermark
+        $x = ($canvas->get_width() - $imgWidth) / 2;
+        $y = ($canvas->get_height() - $imgHeight) / 2;
+        $canvas->image($imagePath, $x, $y, $imgWidth, $imgHeight);
+
+        // Output the generated PDF file
+        return $pdf->stream('Mwecau ICT Club Registered Members.pdf');
     }
 }

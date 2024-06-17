@@ -1,25 +1,26 @@
-@extends('layouts.programming')
+@extends('layouts.graphics-designing')
 @section('content')
     <div class="container">
-        <h4 class="mt-5 mb-3">Programming Resources</h4>
-        @if ($programmingResources->count() > 0)
+        <h4 class="mt-5 mb-3">Graphics Resources</h4>
+        <hr>
+        @if ($graphicsResources->count() > 0)
             <div class="row">
-                @foreach ($programmingResources as $resource)
-                    <div class="col-12 col-md-4 col-md-6 col-lg-3 mt-3">
+                @foreach ($graphicsResources as $resource)
+                    <div class="col-12 col-md-4 col-md-6 col-lg-4 mt-3">
                         <div class="card">
                             <div class="card-header text-primary">{{ $resource->file_name }}</div>
                             <div class="card-body">
                                 <img src="{{ asset('images/resourcesThumbnails/' . $resource->thumbnail) }}"
-                                    class="img-fluid mt-auto" alt="Profile Picture"
-                                    style="height:130px;">
+                                    class="img-fluid w-100 mt-auto" alt="Profile Picture"
+                                    style="height:130px; border-radius: 5px;">
                                 <div class="card-text text-dark">{{ $resource->description }}</div>
                                 <div class="mt-3 d-flex">
 
-                                    <a href="{{ route('programming.resource.preview', $resource->file_name) }}" target="_blank">
+                                    <a href="{{ route('graphics.resource.preview', $resource->file_name) }}" target="_blank">
                                         <button class="btn btn-primary btn-sm"> <i class="fa fa-eye" aria-hidden="true"></i>
                                             Preview</button> </a>
 
-                                    <a href="{{ route('programming.resource.update.view', [$resource->id]) }}"><button
+                                    <a href="{{ route('graphics.resource.update.view', [$resource->id]) }}"><button
                                             class="btn btn-warning btn-sm mx-1"> <i class="fa fa-pencil"
                                                 aria-hidden="true"></i>Edit</button></a>
 

@@ -123,7 +123,9 @@
                     <ul class="dropdown-menu" style="background-color: lightorange">
                         <li><a class="dropdown-item" href="{{ route('admin.register.member') }}">New Member</a></li>
                         <li><a class="dropdown-item" href="{{ route('member_list') }}">Member List</a></li>
-                        <li><a class="dropdown-item" href=""></a></li>
+                        <li><a class="dropdown-item" href="{{ route('showAssignForm') }}">Add department admin</a></li>
+                        <li><a class="dropdown-item" href="{{ route('all.registered.members') }}">APrint All registered
+                                members</a></li>
                     </ul>
                 </div>
 
@@ -153,7 +155,7 @@
                     </button>
                 </a>
 
-                <a href="">
+                <a href="{{ route('admin.financial.panel') }}">
                     <button class="w-100 btn btn-dark mt-3 text-start">
                         <i class="fas fa-dollar"></i>
                         <small>Financial Tracking</small>

@@ -16,7 +16,7 @@
                         {{-- <div class="fs-4 fw-bold">{{ $allMembers }}</div> --}}
                         <p class="">Registered Member</p>
                         <hr>
-                        <a href=""><button class="btn btn-outline-warning">View</button></a>
+                        <a href=""><button class="btn btn-warning">View</button></a>
                     </div>
 
                 </div>
@@ -33,7 +33,7 @@
                         </div>
                         <p class="">Active Members</p>
                         <hr>
-                        <a href=""><button class="btn btn-outline-warning">View</button></a>
+                        <a href=""><button class="btn btn-warning">View</button></a>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                         </div>
                         <p class="">Departments</p>
                         <hr>
-                        <a href=""><button class="btn btn-outline-warning">View</button></a>
+                        <a href=""><button class="btn btn-warning">View</button></a>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                         </div>
                         <p class="">Inactive Members</p>
                         <hr>
-                        <a href=""><button class="btn btn-outline-warning">View</button></a>
+                        <a href=""><button class="btn btn-warning">View</button></a>
                     </div>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                             <td>{{ $members->payment_status }}</td>
                             <td>{{ $members->created_at }}</td>
                             <td>
-                                <a class="btn btn-warning" href="{{ route('update', ['id' => $members->id]) }}">
+                                <a class="btn btn-warning btn-sm" href="{{ route('update', ['id' => $members->id]) }}">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>
                                 <form method="POST" action="{{ route('destroy.member', [$members->id]) }}"
@@ -119,3 +119,11 @@
     </form>
     </div>
 @endsection
+{{-- <form method="POST"
+                                        action="{{ route('cyber-security.member.destroy', [$cyberSecurityMember->id]) }}"
+                                        enctype="multipart/form-data" class="delete-form d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm delete-button"><i
+                                                class="fa fa-trash-alt" aria-hidden="true"></i></button>
+                                    </form> --}}

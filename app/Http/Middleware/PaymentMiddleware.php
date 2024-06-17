@@ -30,7 +30,7 @@ class PaymentMiddleware
             $latestPayment = $user->payments()->latest()->first();
             if ($latestPayment) {
                 // Calculate the payment validity period (5 minutes)
-                $paymentValidUntil = Carbon::parse($latestPayment->date_paid)->addMonth(2);
+                $paymentValidUntil = Carbon::parse($latestPayment->date_paid)->addSeconds(2);
 
                 // Check if the payment is still valid
                 if (Carbon::now()->gte($paymentValidUntil)) {

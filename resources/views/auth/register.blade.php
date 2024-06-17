@@ -71,11 +71,11 @@
                                 <div class="col-md-6">
                                     <select class="form-select @error('course') is-invalid @enderror" name="course"
                                         id="course">
-                                        <option value="1">BScCS</option>
-                                        <option value="2">BAGEN</option>
-                                        <option value="3">Biology ICT</option>
-                                        <option value="3">Chemistry ICT</option>
-                                        <option value="3">Statistics ICT</option>
+                                        <option value="BScCS">BScCS</option>
+                                        <option value="BAGEN">BAGEN</option>
+                                        <option value="Biology ICT">Biology ICT</option>
+                                        <option value="Chemistry ICT">Chemistry ICT</option>
+                                        <option value="Statistics ICT">Statistics ICT</option>
                                     </select>
 
                                     @error('course')
@@ -92,12 +92,10 @@
 
                                 <div class="col-md-6">
                                     <select class="form-select form-select-lg mb-3 @error('category') is-invalid @enderror"
-                                        aria-label=".form-select-lg example">
-                                        <option value="1">programming</option>
-                                        <option value="2">graphics designing</option>
-                                        <option value="3">cyber security</option>
-                                        <option value="3">Comp Maintenance</option>
-                                        <option value="3">Web Development</option>
+                                       name="category" aria-label=".form-select-lg example">
+                                        <option value="programming">programming</option>
+                                        <option value="graphics designing">graphics designing</option>
+                                        <option value="cyber security">cyber security</option>
                                     </select>
 
                                     {{-- <input id="category" type="category"

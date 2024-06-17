@@ -1,20 +1,6 @@
 @extends('layouts.admin')
 @section('content')
     @include('admin.message')
-
-    <div class="container">
-        <div class="col-md-6 mt-5">
-            <!-- Display PDF links -->
-            @foreach ($resources as $resource)
-                <div>
-                    <a class="text-decoration-none text-danger"
-                        href="{{ route('admin.document.preview', $resource->file_path) }}"
-                        target="_blank">{{ $resource->file_name }}</a>
-                </div>
-            @endforeach
-        </div>
-    </div>
-
     <div class="container">
         <h2 class="colorIcon">Resources Management Panel</h2>
         <hr>
@@ -80,9 +66,59 @@
                     </span>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-primary mb-3 mt-3"> <i class="fa fa-upload" aria-hidden="true"></i> Upload Resource</button>
+            <button type="submit" class="btn btn-primary mb-3 mt-3"> <i class="fa fa-upload" aria-hidden="true"></i> Upload
+                Resource</button>
         </form>
-        @if ($resources->count() > 0)
+
+        {{-- <div class="container">
+            <div class="col-md-6 mt-2">
+                <!-- Display PDF links -->
+                @foreach ($resources as $resource)
+                    <div>
+
+                        <a class="text-decoration-none text-danger"
+                            href="{{ route('admin.document.preview', $resource->file_name) }}"
+                            target="_blank">{{ $resource->file_name }}</a>
+                    </div>
+                @endforeach
+            </div>
+        </div> --}}
+
+        <div class="container mt-3">
+            <h1 class="text-center">Latest available resources </h1>
+            @php
+                $counter = 1;
+            @endphp
+            <table class="table table-success table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Resource Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($resources as $resource)
+                        <tr>
+                            <td>{{ $counter++ }}</td>
+                            <td class="fs-5"> <a class="text-decoration-none text-danger"
+                                    href="{{ route('admin.document.preview', $resource->file_name) }}"
+                                    target="_blank">{{ $resource->file_name }}</a>
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ route('resource.destroy', $resource->id) }}"
+                                    enctype="multipart/form-data" class="delete-form d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm delete-button">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        {{-- @if ($resources->count() > 0)
             <div class="row">
                 @foreach ($resources as $resource)
                     <div class="col-12 col-ld-6 col-md-6 mt-3">
@@ -95,9 +131,10 @@
                                 <div class="card-text text-dark">{{ $resource->description }}</div>
                                 <div class="mt-3 d-flex">
 
-                                    <a href="{{ route('admin.document.preview', $resource->file_path) }}" target="_blank">
-                                        <button class="btn btn-primary btn-sm"> <i class="fa fa-eye" aria-hidden="true"></i>
-                                            Preview</button> </a>
+                                    <a href="{{ route('admin.document.preview', $resource->file_name) }}" target="_blank">
+                                        <button class="btn btn-primary btn-sm"><i class="fa fa-eye" aria-hidden="true"></i>
+                                            Preview</button>
+                                    </a>
 
                                     <a href="{{ route('cyber-security.resource.update.view', [$resource->id]) }}"><button
                                             class="btn btn-warning btn-sm mx-1"> <i class="fa fa-pencil"
@@ -125,8 +162,8 @@
                 </div>
             </div>
         @else
-            <p class="alert alert-warning shadow mt-3">Currently no resource is available under cyber security department.
+            <p class="alert alert-warning shadow mt-3 fw-bold">Currently no resource is available.
             </p>
-        @endif
+        @endif --}}
     </div>
 @endsection

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Security Department</title>
+    <title>Graphics & Designing Department</title>
 
     <!-- for title img -->
     <link rel="shortcut icon" type="../image/icon" href="../../../img/logo.jpg" />
@@ -72,12 +72,11 @@
         <nav class="navbar navbar-expand-lg navbar-dark shadow sticky-top"
             style="background: linear-gradient(to left, #265538, #162c1e);">
             <div class="container">
-                <a href="{{ route('cyberSecurity.department') }}"
-                    class="navbar-brand fw-bolder text-light fs-3 fst-italic ">Security Department</a>
+                <a href="{{ route('graphics.dashboard') }}"
+                    class="navbar-brand fw-bolder text-light fs-3 fst-italic ">Graphics & Designing Department</a>
                 <ul class="ms-auto text-light list-unstyled">
                     {{-- <li>{{ Auth::user()->fullname }}</li> --}}
                 </ul>
-
 
                 <div class="btn-group d-none d-sm-block ">
                     <button type="button" class="btn btn-secondary "> {{ Auth::user()->fullname }}</button>
@@ -94,7 +93,6 @@
                             {{ __('Setting') }}
                         </a>
                         <hr>
-
                         {{-- <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
@@ -125,40 +123,40 @@
 
                 {{-- <div class="dropdown-divider"></div> --}}
                 <div class="offcanvas-body text-light">
-                    <a href="{{ route('cyber-security.members') }}">
+                    <a href="{{ route('graphics.members') }}">
                         <button class="w-100 mt-3 mb-2 departmentBtn">
                             <i class="fas fa-users"></i>
                             <small>Manage Members</small></button>
                     </a>
 
-                    <a href="{{ route('cyber-security.register.number') }}">
+                    <a href="{{ route('graphics.register.number') }}">
                         <button class="w-100 departmentBtn mt-3 mb-2 ">
                             <i class="fas fa-users"></i>
                             <small>Registration numbers</small></button>
                     </a>
-                    <a href="{{ route('cyber-security.create.event') }}">
+                    <a href="{{ route('graphics.create.event') }}">
                         <button class="w-100 departmentBtn mt-3 mb-2 ">
                             <small>Event Management</small></button>
                     </a>
-                    <a href="{{ route('cyber-security.post-resources') }}">
+                    <a href="{{ route('graphics.post-resources') }}">
                         <button class="w-100 departmentBtn mt-3 mb-2 ">
                             <i class="fas fa-file-pdf"></i>
                             <small>Resource Repository</small>
                         </button>
                     </a>
-                    <a href="{{ route('cyber-security.financial.panel') }}">
+                    <a href="{{ route('graphics.financial.panel') }}">
                         <button class="w-100 departmentBtn mt-3 mb-2 ">
                             <i class="fas fa-dollar"></i>
                             <small>Financial Tracking</small>
                         </button>
                     </a>
-                    <a href="{{ route('cyber-security.messages') }}">
+                    <a href="{{ route('graphics.messages') }}">
                         <button class="w-100 departmentBtn mt-3 mb-2 ">
                             <i class="fa fa-fax"></i>
                             <small>Feedback & Support</small>
                         </button>
                     </a>
-                    <a href="{{ route('cyber-security.resource.view') }}">
+                    <a href="{{ route('graphics.resource.view') }}">
                         <button class="w-100 departmentBtn mt-3 mb-2">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                             <small>show resources</small>

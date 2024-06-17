@@ -10,12 +10,13 @@ use App\Models\resource;
 use Illuminate\Http\Request;
 use App\Models\Registration_number;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use App\Rules\UniqueRegistrationNumber;
+use Illuminate\Support\Facades\File;
 use App\Rules\ValidRegistrationNumber;
+use App\Rules\UniqueRegistrationNumber;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class ProgrammingController extends Controller
+class GraphicsDesigningController extends Controller
 {
     public function searchByRegNumber(Request $request)
     {
@@ -43,48 +44,48 @@ class ProgrammingController extends Controller
         }
     }
 
-    public function programmingDepartment()
+    public function graphicsDepartment()
     {
         $authicatedUser = Auth::user();
-        $programmingMembers = User::where('category', 'programming')
+        $graphicsMembers = User::where('category', 'graphics designing')
             ->where('usertype', '!=', 'admin')
             ->get();
 
-        $totalProgrammingMembers = User::where('category', 'programming')
+        $totalGraphicsMembers = User::where('category', 'graphics designing')
             ->where('id', '!=', $authicatedUser->id)
             ->where('usertype', '!=', 'admin')
             ->count();
 
         //fetching all active members under programming department
         $totalActiveMembers = user::where('payment_status', 'active')
-            ->where('category', 'programming')
+            ->where('category', 'graphics designing')
             ->where('usertype', '!=', 'admin')
             ->where('id', '!=', $authicatedUser->id)
             ->count();
 
         $activeMembers = user::where('payment_status', 'active')
-            ->where('category', 'programming')
+            ->where('category', 'graphics designing')
             ->where('usertype', '!=', 'admin')
             ->where('id', '!=', $authicatedUser->id)
             ->get();
 
         //fetching all inactive members under programming department
         $totalInactiveMembers = user::where('payment_status', 'inactive')
-            ->where('category', 'programming')
+            ->where('category', 'graphics designing')
             ->where('id', '!=', $authicatedUser->id)
             ->count();
 
         $inactiveMembers = user::where('payment_status', 'inactive')
-            ->where('category', 'programming')
+            ->where('category', 'graphics designing')
             ->where('id', '!=', $authicatedUser->id)
             ->get();
 
         $totalRescources = resource::all()->count();
         return view(
-            'admin.departments.programming.dashboard',
+            'admin.departments.graphics-design.dashboard',
             compact(
-                'programmingMembers',
-                'totalProgrammingMembers',
+                'graphicsMembers',
+                'totalGraphicsMembers',
                 'authicatedUser',
                 'totalActiveMembers',
                 'activeMembers',
@@ -99,10 +100,10 @@ class ProgrammingController extends Controller
     public function register()
     {
 
-        return view('admin.departments.programming.register-member');
+        return view('admin.departments.graphics-design.register-member');
     }
 
-    public function newProgrammingMember(Request $request)
+    public function newGraphicsgMember(Request $request)
     {
 
         $request->validate([
@@ -116,29 +117,32 @@ class ProgrammingController extends Controller
             'registration_number.required' => 'Please enter Registration number is require',
             'registration_number.unique' => 'Registration number already exist',
             'fullname.required' => 'Please enter member fullname',
+            'email.required' => 'The E-mail field is required',
+            'email.unique' => 'This email is already registered',
             'course.required' => 'Course filled is required',
             'category.required' => 'Please select category from the list',
             'password.required' => 'Password filled is required'
 
         ]);
 
-        $programmingMember = new User();
+        $graphicsMember = new User();
 
-        $programmingMember->registration_number = $request->registration_number;
-        $programmingMember->fullname =  $request->fullname;
-        $programmingMember->email = $request->email;
-        $programmingMember->course = $request->course;
-        $programmingMember->category = $request->category;
-        $programmingMember->password = $request->password;
+        $graphicsMember->registration_number = $request->registration_number;
+        $graphicsMember->fullname =  $request->fullname;
+        $graphicsMember->email = $request->email;
+        $graphicsMember->course = $request->course;
+        $graphicsMember->category = $request->category;
+        $graphicsMember->password = $request->password;
 
-        alert::success('Message', 'Member successfully registered')->autoClose('6000');
-        return redirect(route('admin.departments.programming.dashboard'))->with('message', 'Member Successfully Registered');
+        $graphicsMember->save();
+        Alert::success('Message', 'Member successfully registered')->position('bottom-end')->autoClose('6000');
+        return redirect(route('graphics.register.member'))->with('message', 'Member Successfully Registered');
     }
     public function memberUpdateView($id)
     {
 
         $memberInfo = User::findOrFail($id);
-        return view('admin.departments.programming.programming-member-update', compact('memberInfo'));
+        return view('admin.departments.graphics-design.graphics-member-update', compact('memberInfo'));
     }
     //function to update member informations
     public function edit(Request $request, $id)
@@ -149,40 +153,43 @@ class ProgrammingController extends Controller
         $member->update($request->input());
 
         Alert::success('Message', 'Information updated successfully');
-        return redirect()->route('programming.members');
+        return redirect()->route('graphics.members');
     }
     //return view for programming members
-    public function programmingMembers()
+    public function graphicsMembers()
     {
-        $programmingMembers = user::where('category', 'programming')
+        $graphicsMembers = user::where('category', 'graphics designing')
             ->where('usertype', '!=', 'admin')
             ->get();
-        return view('admin.departments.programming.programming-members', compact('programmingMembers'));
+        return view('admin.departments.graphics-design.graphics-members', compact('graphicsMembers'));
     }
     //deleting programming member
     public function memberDestroy($id)
     {
 
         $memberDestroy = User::findOrFail($id);
-        $memberDestroy->delete();
+        if (File::exists($memberDestroy->profile_picture)) {
+            File::delete($memberDestroy->profile_picture);
+        }
 
+        $memberDestroy->delete();
         Alert::success('Message', 'Member delete successfully');
         return redirect()->back();
     }
     //registering registration numbers
     public function registerNumbers()
     {
-        $totalProgrammingMembers = user::where('category', 'programming')
+        $totalProgrammingMembers = user::where('category', 'graphics designing')
             ->where('usertype', '!=', 'admin')
             ->count();
-        return view('admin.departments.programming.registration-numbers', compact('totalProgrammingMembers'));
+        return view('admin.departments.graphics-design.registration-numbers', compact('totalProgrammingMembers'));
     }
     //returning event view for creating an event
     public function createEvent()
     {
 
         $events = event::all();
-        return view('admin.departments.programming.create-event', compact('events'));
+        return view('admin.departments.graphics-design.create-event', compact('events'));
     }
     //posting an event
     public function eventUpload(Request $request)
@@ -221,11 +228,11 @@ class ProgrammingController extends Controller
         return redirect()->back();
     }
     //particular event details
-    public function programmingEventDetails($id)
+    public function graphicsEventDetails($id)
     {
 
         $eventDetails = event::findOrFail($id);
-        return view('admin.departments.programming.programming-eventDetails', compact('eventDetails'));
+        return view('admin.departments.graphics-design.graphics-eventDetails', compact('eventDetails'));
     }
     public function eventDestroy($id)
     {
@@ -240,15 +247,15 @@ class ProgrammingController extends Controller
     public function resources()
     {
         $resources = resource::all()->take('2');
-        return view('admin.departments.programming.post-resources', compact('resources'));
+        return view('admin.departments.graphics-design.post-resources', compact('resources'));
     }
     //this function retruns the list of all resources under programming department
-    public function programmingResources()
+    public function graphicsResources()
     {
-        $programmingResources = resource::all();
-        return view('admin.departments.programming.programming-resources', compact('programmingResources'));
+        $graphicsResources = resource::all();
+        return view('admin.departments.graphics-design.graphics-resources', compact('graphicsResources'));
     }
-    //posting programming resources
+    //posting graphics resources
     public function uploadResource(Request $request)
     {
         $request->validate([
@@ -300,37 +307,78 @@ class ProgrammingController extends Controller
         Alert::success('Ujumbe', 'Mchakato Umefanikiwa');
         return redirect()->back();
     }
-    public function documentPreview($fileName)
+    //THIS FUNCTION UPDATE THE EXISTING RESOURCE INFORMATION
+    public function updateResourceInfo(Request $request, $id)
     {
-        // Ensure you are fetching the document using the correct field
-        $document = Resource::where('file_name', $fileName)->first();
+        $request->validate([
+            'title' => ['required', 'string'],
+            'description' => ['required', 'string', 'max:255'],
+            'category' => ['required'],
+            'file' => ['required', 'mimes:pdf', 'max:3000'],
+            'thumbnail' => ['required', 'mimes:png,jpeg,jpg', 'max:1000'],
+        ], [
+            'title.required' => 'The title field is required.',
+            'title.string' => 'The title must be a string value.',
+            'description.required' => 'The description field is required.',
+            'description.max' => 'The title field must not exceed 255 characters.',
+            'category.required' => 'Please select a category for the resource.',
+            'file.required' => 'Please select a resource file to upload.',
+            'file.mimes' => 'Only files of type PDF are allowed.',
+            'file.max' => 'The uploaded file exceeds the maximum size of 3MB. Please select a smaller file.',
+            'thumbnail.required' => 'please select a resource thumbnail',
+            'thumbnail.mimes' => 'thumbnail can only be of type jpeg, jpg or png',
+            'thumbnail.max' => 'maximum thumbnail size is 3MB'
+        ]);
 
-        if (!$document) {
-            Alert::error('Message', 'Something went wrong');
-            return redirect()->back();
+        $resource = resource::findOrFail($id);
+
+        //PROCESSING A PDF FILE
+        $file = $request->file('file');
+        $fileName = time() . "_" . $file->getClientOriginalName();
+
+        //storing the uploaded file in storage/app/public/uploads/pdfs
+        $file->storeAs('public/uploads/pdfs', $fileName);
+
+        //PROCESSING THUMBNAIL
+        if ($request->hasFile('thumbnail')) {
+            $thumbnailFile = $request->file('thumbnail');
+            $thumbnailName = $thumbnailFile->getClientOriginalName();
+            $fileName = time() . '-' . $thumbnailName;
+            $path = 'images/resourcesThumbnails';
+
+            //checking if thumbnail is existing then replace it
+            if ($request->file('thumbnail')) {
+                $existingThumbnail = public_path($path . '/' . $resource->thumbnail);
+                if (File::exists($existingThumbnail)) {
+                    File::delete($existingThumbnail);
+                }
+            }
+            //move and saving new uploaded file
+            $thumbnailFile->move($path, $fileName);
+            $resource->thumbnail = $fileName;
         }
 
-        // Get the storage path for the document file
-        $filePath = storage_path('app/public/uploads/pdfs/' . $fileName);
+        $resource->title = $request->title;
+        $resource->description = $request->description;
+        $resource->category = $request->category;
+        $resource->file_name = $file->getClientOriginalName();
+        $resource->file_path = $fileName;
+        //saving updated resource data
+        $resource->save();
 
-        if (!file_exists($filePath)) {
-            Alert::error('Message', 'Document does not exist on our server');
-            return redirect()->back();
-        }
-
-        // Return a response to display the PDF in the browser
-        return response()->file($filePath);
+        Alert::success('Message', 'Resource data Saved Successfully')->autoClose('6000');
+        return redirect()->back();
     }
 
     public function resourceUpdateView($id)
     {
         $resources = resource::find($id);
 
-        return view('admin.departments.programming.update-resource', compact('resources'));
+        return view('admin.departments.graphics-design.update-resource', compact('resources'));
     }
-    public function programmingFinancial()
+    public function graphicsFinancial()
     {
-        return view('admin.departments.programming.financial');
+        return view('admin.departments.graphics-design.financial');
     }
     public function destroy($id)
     {
@@ -349,10 +397,10 @@ class ProgrammingController extends Controller
     }
 
     //messages from website under cyber department
-    public function programmingMessages()
+    public function graphicsMessages()
     {
-        $comments = Comment::where('category', 'programming')->get();
-        return view('admin.departments.programming.programming-messages', compact('comments'));
+        $comments = Comment::where('category', 'graphics_designing')->get();
+        return view('admin.departments.graphics-design.graphics-messages', compact('comments'));
     }
     //deleting message
     public function messageDestroy($id)
@@ -394,6 +442,28 @@ class ProgrammingController extends Controller
             Alert::success('Success', 'Registration numbers stored successfully.');
             return redirect()->back();
         }
+    }
+    //previewing uploaded files
+    public function documentPreview($fileName)
+    {
+        // Ensure you are fetching the document using the correct field
+        $document = Resource::where('file_name', $fileName)->first();
+
+        if (!$document) {
+            Alert::error('Message', 'Something went wrong');
+            return redirect()->back();
+        }
+
+        // Get the storage path for the document file
+        $filePath = storage_path('app/public/uploads/pdfs/' . $fileName);
+
+        if (!file_exists($filePath)) {
+            Alert::error('Message', 'Document does not exist on our server');
+            return redirect()->back();
+        }
+
+        // Return a response to display the PDF in the browser
+        return response()->file($filePath);
     }
 
     // public function searchByRegNumber(Request $request)
