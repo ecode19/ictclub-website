@@ -76,10 +76,10 @@ class LoginController extends Controller
                         return redirect('admin/departments/cyber-security/dashboard/');
                     }
                     if ($department == 'graphics designing') {
-                        toast('Welcome to Cyber Graphics department', 'success')->position('top')->autoClose('6000');
+                        toast('Welcome to Graphics department', 'success')->position('top')->autoClose('6000');
                         return redirect('admin/departments/graphics-designing/dashboard/');
                     }
-                    
+
                     if ($department == 'root') {
                         toast('Successfully logged in', 'success')->position('top')->autoClose('6000');
                         return redirect('admin/AdminDashboard/');

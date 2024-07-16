@@ -19,7 +19,9 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
+
     <link rel="stylesheet" href="{{ asset('jquery/css/dataTables.bootstrap5.min.css') }}">
+
     <link rel="stylesheet" href="{{ asset('/css/aos/dist/aos.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.min.css">
 
@@ -59,18 +61,18 @@
             border-radius: 10px;
             height: 240px;
             color: white;
-            background: linear-gradient(to top, #031a47, #4a649b);
+            background: linear-gradient(to top, #02102b, #1e57d3);
         }
     </style>
 </head>
 
-<body>
+<body class="overflow-x-hidden">
     @include('sweetalert::alert')
 
     {{-- admin navigation bar --}}
 
     <nav class="navbar navbar-expand-lg navbar-dark shadow sticky-top"
-        style="background: linear-gradient(to bottom, #031a47, #031a47);">
+        style="background: linear-gradient(to right, #02102b, #1e57d3);">
         <div class="container">
             <a href="{{ route('AdminDashboard') }}" class="navbar-brand fw-bolder text-light fs-3">MICs</a>
             <ul class="ms-auto text-light list-unstyled">
@@ -106,7 +108,7 @@
     <!--offcanvas-->
     <section>
         <div class="offcanvas offcanvas-start text-light shadow-lg sidebar-nav" tabindex="-1" id="offcanvasExample"
-            aria-labelledby="offcanvasExampleLabel" style="background: linear-gradient(to top, #031a47, #4a649b);">
+            aria-labelledby="offcanvasExampleLabel" style="background: linear-gradient(to top, #02102b, #1e57d3);">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title text-muted" id="offcanvasExampleLabel"> <i class="fas fa-dashboard"></i>
                     Dashboard</h5>
@@ -124,8 +126,7 @@
                         <li><a class="dropdown-item" href="{{ route('admin.register.member') }}">New Member</a></li>
                         <li><a class="dropdown-item" href="{{ route('member_list') }}">Member List</a></li>
                         <li><a class="dropdown-item" href="{{ route('showAssignForm') }}">Add department admin</a></li>
-                        <li><a class="dropdown-item" href="{{ route('all.registered.members') }}">APrint All registered
-                                members</a></li>
+                        <li><a class="dropdown-item" href="{{ route('admin.register.number') }}">Verify Number</a></li>
                     </ul>
                 </div>
 
@@ -168,6 +169,50 @@
                         <small>show resources</small>
                     </button>
                 </a>
+
+
+                <div class="dropdown mt-3">
+                    {{-- <a href="{{ route('member_list') }}"><button class="f btn btn-dark mt-3"> Manage Member</button></a> --}}
+                    <button class="w-100 btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-folder"></i> Manage site
+                    </button>
+                    <ul class="dropdown-menu" style="background-color: lightorange">
+                        <li><a class="dropdown-item" href="{{ route('manage.team.members') }}">Team Members</a></li>
+                        </li>
+                    </ul>
+                </div>
+
+                <a href="https://mwecauictclubforum.onrender.com?username={{ Auth::user()->registration_number }}&room={{ Auth::user()->category }}"
+                    target="_blank">
+                    <button class="w-100 btn btn-dark mt-3 text-start">
+                        <i class="fa fa-message" aria-hidden="true"></i>
+                        <small>Chat Forum</small>
+                    </button>
+                </a><br>
+
+                <div class="dropdown mt-3">
+                    {{-- <a href="{{ route('member_list') }}"><button class="f btn btn-dark mt-3"> Manage Member</button></a> --}}
+                    <button class="w-100 btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-folder"></i> Print Documents
+                    </button>
+                    <ul class="dropdown-menu" style="background-color: lightorange">
+                        <li><a class="dropdown-item" href="{{ route('all.registered.members') }}">Print All
+                                registered members</a></li>
+                        <li><a class="dropdown-item" href="{{ route('active-members') }}">Print active
+                                members</a></li>
+                        <li><a class="dropdown-item" href="{{ route('inactive-members') }}">Print inactive
+                                members</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('club.departments') }}">Print Department List</a>
+                        <li><a class="dropdown-item" href="{{ route('club.cyber.members') }}">Members Under cyber</a>
+                        <li><a class="dropdown-item" href="{{ route('club.programming.members') }}">Members under
+                                programming</a>
+                        <li><a class="dropdown-item" href="{{ route('club.graphics.members') }}">Members Under
+                                Graphics</a>
+                        <li><a class="dropdown-item" href="{{ route('verified.numbers') }}">Verified Numbers</a>
+                        </li>
+                    </ul>
+                </div>
 
                 <a class="btn btn-secondary btn-sm mt-2 w-100 text-start" href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -229,61 +274,20 @@
     </script>
 
     <script src="{{ asset('jquery/js/jquery-3.5.1.js') }}"></script>
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.js') }}"></script>
     <script src="{{ asset('jquery/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('jquery/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('bootstrap/js/bootstrap.bundle.js') }}"></script>
+
 
     <script>
-        // icomplete yajra datatables
         $(document).ready(function() {
-            // Initialize your DataTable
-            $('.yajra-datatable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('get.AllUsers') }}",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex'
-                    },
-                    {
-                        data: 'registration_number',
-                        name: 'registration_number'
-                    },
-                    {
-                        data: 'fullname',
-                        name: 'fullname'
-                    },
-                    {
-                        data: 'course',
-                        name: 'course'
-                    },
-                    {
-                        data: 'payment_status',
-                        name: 'payment_status'
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: true,
-                        searchable: true
-                    },
-                ]
-            });
+            $('#myTable').DataTable();
         });
     </script>
-    {{-- <script>
-        $(document).ready(function() {
-            $('#memberTable').DataTable();
-        });
-    </script> --}}
 
-    <script>
-        let table = new DataTable('#myTable');
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </body>
 

@@ -7,8 +7,14 @@
                 <form action="{{ route('names.search') }}" method="GET">
                     @csrf
                     <label for="search" class="mb-3 fw-bold">Search</label>
-                    <input type="search" class="form-control" name="registration_number" id="search"
+                    <input type="search" class="form-control @error('registration_number') is-invalid @enderror"
+                        name="registration_number" id="search"
                         placeholder="Type member registration number to start search.">
+                    @error('registration_number')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                     <button type="submit" class="departmentBtn mt-2">Search</button>
                 </form>
             </div>
@@ -21,8 +27,7 @@
                             <h2>Active member</h2>
                             <h4>{{ $totalActiveMembers }}</h4>
                             <hr>
-                            <a href="#active" data-bs-toggle="modal"><button
-                                class="fw-bold departmentBtn">View</button></a>
+                            <a href="#active" data-bs-toggle="modal"><button class="fw-bold departmentBtn">View</button></a>
                         </div>
 
                     </div>
@@ -55,8 +60,7 @@
                             @endif
 
                             <hr>
-                            <a href=""><button
-                                    class="fw-bold departmentBtn">View</button></a>
+                            <a href=""><button class="fw-bold departmentBtn">View</button></a>
                         </div>
                     </div>
                 </div>
@@ -97,10 +101,11 @@
                     department.
                 </p>
             @endif
+            <div>
+                <h3> <strong>Total: </strong> {{ $totalGraphicsMembers }}</h3>
+            </div>
 
 
-            <h1>{{ $totalGraphicsMembers }}</h1>
-            <i class="fa fa-address-book fs-2" aria-hidden="true" style="color: #8E05c2"></i>
         </div>
 
         <!--active members Modal HTML -->
@@ -112,12 +117,18 @@
                         <button type="button" class="btn-close bg-warning" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        @foreach ($activeMembers as $activeMember)
-                            <h6 class="">{{ $activeMember->registration_number }}</h6>
-                        @endforeach
+                        @if (count($activeMembers) > 0)
+                            @foreach ($activeMembers as $activeMember)
+                                <h6 class="">{{ $activeMember->registration_number }}</h6>
+                            @endforeach
+                        @else
+                            <p class="alert alert-warning" role="alert">Currently, All members are inactive.</p>
+                        @endif
+
                     </div>
                     <div class="modal-footer">
-                        {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button> --}}
+                        <a href="" class="btn btn-secondary">Print</a>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -132,12 +143,18 @@
                         <button type="button" class="btn-close bg-warning" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        @foreach ($inactiveMembers as $inactiveMember)
-                            <h6 class="">{{ $inactiveMember->registration_number }}</h6>
-                        @endforeach
+                        @if (count($inactiveMembers) > 0)
+                            @foreach ($inactiveMembers as $inactiveMember)
+                                <h6 class="">{{ $inactiveMember->registration_number }}</h6>
+                            @endforeach
+                        @else
+                            <p class="alert alert-success" role="alert">Currently, All Members are active.</p>
+                        @endif
+
                     </div>
                     <div class="modal-footer">
-                        {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button> --}}
+                        <a href="" class="btn btn-secondary">Print</a>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

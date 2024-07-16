@@ -147,7 +147,46 @@
             <h2 class="display-4 text-center colorIcon">Our Entire Team</h2>
             <div class="row g-0 ">
                 <div class="team-sliderAbout">
-                <div class="col-12 col-md-6 col-lg-3">
+                    @foreach ($teamMembers as $member)
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="team-cardAbout card-with-border shadow-lg">
+                                <div class="team-member-img">
+                                    <img src="{{ asset('images/profilePictures/' . $member->profile_image) }}"
+                                        class="shadow-lg mb-4 img-fluid rounded-circle mx-auto" alt="Developer">
+                                </div>
+
+                                <div class="card-body text-center">
+                                    <div class="fw-bold">{{ $member->name }}</div>
+                                    <div class="text-info fst-italic  mb-3">{{ $member->title }}</div>
+                                    <div class="social-icons">
+                                        @if ($member->x)
+                                            <a href="{{ $member->x }}"><i class="fab fa-twitter fs-4"></i></a>
+                                        @else
+                                            <a href="#"><i class="fab fa-twitter fs-4"></i></a>
+                                        @endif
+                                        @if ($member->whatsApp)
+                                            <a href="{{ $member->whatsApp }}"><i class="fab fa-whatsapp mx-1 fs-4"></i></a>
+                                        @else
+                                            <a href="#"><i class="fab fa-whatsapp mx-1 fs-4"></i></a>
+                                        @endif
+                                        @if ($member->email)
+                                            <a href="mailto:{{ $member->email }}"><i
+                                                    class="fab fa-google mx-1 fs-4"></i></a>
+                                        @else
+                                            <a href="#"><i class="fab fa-google mx-1 fs-4"></i></a>
+                                        @endif
+                                        @if ($member->facebook)
+                                            <a href="{{ $member->facebook }}"><i
+                                                    class="fab fa-facebook-f mx-1 fs-4"></i></a>
+                                        @else
+                                            <a href="#"><i class="fab fa-facebook-f mx-1 fs-4"></i></a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                    {{-- <div class="col-12 col-md-6 col-lg-3">
                     <div class="team-cardAbout card-with-border shadow-lg">
                         <div class="team-member-img">
                             <img src="../img/logo.jpg" class=" shadow-lg mb-4 img-fluid rounded-circle mx-auto"
@@ -167,163 +206,9 @@
                             </p>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="team-cardAbout card-with-border shadow-lg">
-                        <div class="team-member-img">
-                            <img src="../img/Picture1.jpg" class=" shadow-lg mb-4 img-fluid rounded-circle mx-auto"
-                                alt="Developer">
-                        </div>
-
-                        <div class="card-body text-center">
-                            <div class="fw-bold">Ms.Happness Maleko</div>
-                            <div class="text-info fst-italic  mb-3">Club Advisor</div>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-twitter fs-4 "></i></a>
-                                <a href="#"><i class="fab fa-whatsapp mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-google mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-facebook-f mx-1 fs-4"></i></a>
-                            </div>
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="team-cardAbout card-with-border shadow-lg">
-                        <div class="team-member-img">
-                            <img src="../img/chair.jpg" class=" shadow-lg mb-4 img-fluid rounded-circle mx-auto"
-                                alt="Developer">
-                        </div>
-
-                        <div class="card-body text-center">
-                            <div class="fw-bold">Mr. Edward Mangu</div>
-                            <div class="text-info fst-italic  mb-3">Club Chairman</div>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-twitter fs-4 "></i></a>
-                                <a href="#"><i class="fab fa-whatsapp mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-google mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-facebook-f mx-1 fs-4"></i></a>
-                            </div>
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="team-cardAbout card-with-border shadow-lg">
-                        <div class="team-member-img">
-                            <img src="../img/mbwambo.jpg" class=" shadow-lg mb-4 img-fluid rounded-circle mx-auto"
-                                alt="Developer">
-                        </div>
-
-                        <div class="card-body text-center">
-                            <div class="fw-bold">Mr. Valentino Mbwambo</div>
-                            <div class="text-info fst-italic  mb-3">Vice Chairman </div>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-twitter fs-4 "></i></a>
-                                <a href="#"><i class="fab fa-whatsapp mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-google mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-facebook-f mx-1 fs-4"></i></a>
-                            </div>
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="team-cardAbout card-with-border shadow-lg">
-                        <div class="team-member-img">
-                            <img src="../img/logo.jpg" class=" shadow-lg mb-4 img-fluid rounded-circle mx-auto"
-                                alt="Developer">
-                        </div>
-
-                        <div class="card-body text-center">
-                            <div class="fw-bold">Erick Manyasi</div>
-                            <div class="text-info fst-italic  mb-3">Project manager</div>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-twitter fs-4"></i></a>
-                                <a href="#"><i class="fab fa-whatsapp mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-google mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-facebook-f mx-1 fs-4"></i></a>
-                            </div>
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="team-cardAbout card-with-border shadow-lg">
-                        <div class="team-member-img">
-                            <img src="../img/suleiman.jpg" class=" shadow-lg mb-4 img-fluid rounded-circle mx-auto"
-                                alt="Developer">
-                        </div>
-
-                        <div class="card-body text-center">
-                            <div class="fw-bold">Mr. Suleiman Ramadhan</div>
-                            <div class="text-info fst-italic  mb-3"> HOD Programming</div>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-twitter fs-4"></i></a>
-                                <a href="#"><i class="fab fa-whatsapp mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-google mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-facebook-f mx-1 fs-4"></i></a>
-                            </div>
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="team-cardAbout card-with-border shadow-lg">
-                        <div class="team-member-img">
-                            <img src="../img/roster.jpg" class=" shadow-lg mb-4 img-fluid rounded-circle mx-auto"
-                                alt="Developer">
-                        </div>
-
-                        <div class="card-body text-center">
-                            <div class="fw-bold">Ms. Roster Mwaluanda</div>
-                            <div class="text-info fst-italic  mb-3">   HOD Networking</div>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-twitter fs-4"></i></a>
-                                <a href="#"><i class="fab fa-whatsapp mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-google mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-facebook-f mx-1 fs-4"></i></a>
-                            </div>
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="team-cardAbout card-with-border shadow-lg">
-                        <div class="team-member-img">
-                            <img src="../img/logo.jpg" class=" shadow-lg mb-4 img-fluid rounded-circle mx-auto"
-                                alt="Developer">
-                        </div>
-
-                        <div class="card-body text-center">
-                            <div class="fw-bold">Mr. Denis Richard</div>
-                            <div class="text-info fst-italic  mb-3">HOD Graphics & Designing </div>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-twitter fs-4"></i></a>
-                                <a href="#"><i class="fab fa-whatsapp mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-google mx-1 fs-4"></i></a>
-                                <a href="#"><i class="fab fa-facebook-f mx-1 fs-4"></i></a>
-                            </div>
-
-                            </p>
-                        </div>
-                    </div>
+                </div> --}}
                 </div>
             </div>
-        </div>
         </div>
     </section> <br>
     <!--team end-->

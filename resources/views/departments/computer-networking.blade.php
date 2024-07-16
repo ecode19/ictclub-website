@@ -11,7 +11,7 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="">
+                    <div class="text-light">
                         <p align="justify" class="lh-lg fs-6">
                             <span class="text-primary fs-4">Networking.</span> is the practice of connecting devices
                             together to form a communication network. It is an essential aspect of the modern digital

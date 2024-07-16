@@ -13,6 +13,7 @@
                                     class="img-fluid w-100 mt-auto" alt="Profile Picture"
                                     style="height:130px; border-radius: 5px;">
                                 <div class="card-text text-dark">{{ $resource->description }}</div>
+                                <p class="mt-3 fw-bold text-dark">Posted By: {{ $resource->user->fullname }}</p>
                                 <div class="mt-3 d-flex">
 
                                     <a href="{{ route('cyber-security.resource.preview', $resource->file_name) }}" target="_blank">

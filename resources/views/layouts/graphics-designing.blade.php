@@ -5,14 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Graphics & Designing Department</title>
+    <title>Graphics Division</title>
 
     <!-- for title img -->
     <link rel="shortcut icon" type="../image/icon" href="../../../img/logo.jpg" />
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
+
+    <script src="{{ asset('jquery/js/jquery-3.5.1.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('jquery/css/dataTables.bootstrap5.min.css') }}">
+    <script src="{{ asset('jquery/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('jquery/js/jquery.dataTables.min.js') }}"></script>
+
     <link rel="stylesheet" href="{{ asset('/css/aos/dist/aos.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.min.css">
 
@@ -73,7 +78,7 @@
             style="background: linear-gradient(to left, #265538, #162c1e);">
             <div class="container">
                 <a href="{{ route('graphics.dashboard') }}"
-                    class="navbar-brand fw-bolder text-light fs-3 fst-italic ">Graphics & Designing Department</a>
+                    class="navbar-brand fw-bolder text-light fs-3 fst-italic ">Graphics & Designing Division</a>
                 <ul class="ms-auto text-light list-unstyled">
                     {{-- <li>{{ Auth::user()->fullname }}</li> --}}
                 </ul>
@@ -129,14 +134,15 @@
                             <small>Manage Members</small></button>
                     </a>
 
-                    <a href="{{ route('graphics.register.number') }}">
-                        <button class="w-100 departmentBtn mt-3 mb-2 ">
+                    {{-- <a href="">
+                        <button class="w-100 departmentBtn mt-3 mb-2 text-muted">
                             <i class="fas fa-users"></i>
-                            <small>Registration numbers</small></button>
-                    </a>
+                            <small>Announcement</small></button>
+                    </a> --}}
+
                     <a href="{{ route('graphics.create.event') }}">
                         <button class="w-100 departmentBtn mt-3 mb-2 ">
-                            <small>Event Management</small></button>
+                            <small>Announcement</small></button>
                     </a>
                     <a href="{{ route('graphics.post-resources') }}">
                         <button class="w-100 departmentBtn mt-3 mb-2 ">
@@ -163,6 +169,14 @@
                         </button>
                     </a> <br>
 
+                    <a href="https://mwecauictclubforum.onrender.com?username={{ Auth::user()->registration_number }}&room={{ Auth::user()->category }}"
+                        target="_blank">
+                        <button class="w-100 departmentBtn mt-3 text-start">
+                            <i class="fa fa-message" aria-hidden="true"></i>
+                            <small>Chat Forum</small>
+                        </button>
+                    </a><br>
+                    
                     {{--    laravel default login script --}}
                     <a href="{{ route('logout') }}" class="text-decoration-none fw-bold text-warning "
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -182,9 +196,22 @@
             @yield('content')
         </main>
 
-        <footer>
-            footer place here
-        </footer>
+        {{-- footer --}}
+        <section class=" ">
+            <div class="text-center py-5 mt-5 mb-0 sticky-lg-bottom">
+                <a class="text-white text-decoration-none" href="https://mwecauictclub.ac.tz/">
+                    <p class="text-center text-white"><i class="far fa-copyright text-white"></i> <?php echo date('Y'); ?>
+                        Mwecauictclub
+                    </p>
+                </a>
+                <a href="" class="text-decoration-none">
+                    <p class="text-center text-white">
+                        Designed and Developed By : E & S
+                    </p>
+                </a>
+            </div>
+        </section>
+        <!-- footer end -->
     </div>
 
     <script>
@@ -234,6 +261,16 @@
             inactiveMembersTable.style.display = 'block'
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="{{ asset('jquery/js/jquery-3.5.1.js') }}"></script>
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.js') }}"></script>

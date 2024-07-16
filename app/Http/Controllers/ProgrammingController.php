@@ -25,7 +25,7 @@ class ProgrammingController extends Controller
         // $user = User::where('registration_number', $searchNumber)->first();
         $user = User::where('registration_number', $searchNumber)
             ->where('usertype', '!=', 'admin')
-            ->where('category', '=', 'cyber security')
+            ->where('category', '=', 'programming')
             ->select('id', 'registration_number', 'fullname', 'course', 'category', 'email', 'created_at')->first();
         $totalResults = User::where('registration_number', $searchNumber)->select('id', 'registration_number', 'fullname', 'course', 'category', 'email', 'created_at')->count();
 
@@ -169,14 +169,7 @@ class ProgrammingController extends Controller
         Alert::success('Message', 'Member delete successfully');
         return redirect()->back();
     }
-    //registering registration numbers
-    public function registerNumbers()
-    {
-        $totalProgrammingMembers = user::where('category', 'programming')
-            ->where('usertype', '!=', 'admin')
-            ->count();
-        return view('admin.departments.programming.registration-numbers', compact('totalProgrammingMembers'));
-    }
+
     //returning event view for creating an event
     public function createEvent()
     {
@@ -288,6 +281,7 @@ class ProgrammingController extends Controller
         //saving the information on to the database
         $newResource = new resource();
 
+        $newResource->user_id = Auth::id();
         $newResource->title = $request->title;
         $newResource->description = $request->description;
         $newResource->category = $request->category;
@@ -365,36 +359,7 @@ class ProgrammingController extends Controller
         Alert::success('Message', 'Comment deleted successfully')->autoClose('5000');
         return redirect()->back();
     }
-    //here department registers member registration before member sign up.
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'registration_numbers.*' => ['required', 'string', 'max:255', new UniqueRegistrationNumber],
-        ]);
 
-        $existingNumbers = []; // Array to store existing registration numbers
-        $errors = []; // Array to store error messages
-
-        foreach ($validatedData['registration_numbers'] as $registrationNumber) {
-            // Check if registration number already exists
-            if (Registration_number::where('registration_number', $registrationNumber)->exists()) {
-                $errors[] = "Registration number '$registrationNumber' already exists.";
-                $existingNumbers[] = $registrationNumber; // Optional: Store existing numbers for user feedback
-            } else {
-                // Store the registration number in the database if it's unique
-                Registration_number::create(['registration_number' => $registrationNumber]);
-            }
-        }
-
-        if (count($errors) > 0) {
-            // Handle errors: display them or redirect with error message
-            Alert::error('error', 'Some entered have been exluded as they already exist in our records.')->autoClose('8000');
-            return redirect()->back()->withErrors($errors); // Flash error messages to the session
-        } else {
-            Alert::success('Success', 'Registration numbers stored successfully.');
-            return redirect()->back();
-        }
-    }
 
     // public function searchByRegNumber(Request $request)
     // {

@@ -92,6 +92,10 @@
                         <a class="btn color text-white fs-5"
                             href="{{ route('member.profile.update.form', [$authenticatedUser->id]) }}">
                             Update Profile</a>
+
+                            <a class="btn color text-white fs-5 mt-2" href="{{ route('membership.card.print') }}">
+                                Print Membership Card
+                            </a>
                     </div>
                 </div>
                 <div class="col-12 col-md-12 col-lg-6 mt-5">
@@ -143,7 +147,7 @@
         </div>
     </section>
     <div class="container">
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-warning fs-5 fst-italic" role="alert">
             <p> <strong> NOTE: </strong> For Any Missing or incorrect information please Contact, <strong>Mr: Mahuyemba
                 </strong></p>
         </div>

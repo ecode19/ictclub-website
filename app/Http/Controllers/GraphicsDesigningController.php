@@ -20,13 +20,18 @@ class GraphicsDesigningController extends Controller
 {
     public function searchByRegNumber(Request $request)
     {
+        $request->validate([
+            'registration_number' => ['required']
+        ],[
+            'registration_number.required' => 'Please Enter Valid Registration number to start search'
+        ]);
         $searchNumber = $request->input('registration_number');
 
         // Perform the search using Eloquent ORM
         // $user = User::where('registration_number', $searchNumber)->first();
         $user = User::where('registration_number', $searchNumber)
             ->where('usertype', '!=', 'admin')
-            ->where('category', '=', 'cyber security')
+            ->where('category', '=', 'graphics designing')
             ->select('id', 'registration_number', 'fullname', 'course', 'category', 'email', 'created_at')->first();
         $totalResults = User::where('registration_number', $searchNumber)->select('id', 'registration_number', 'fullname', 'course', 'category', 'email', 'created_at')->count();
 
@@ -295,6 +300,7 @@ class GraphicsDesigningController extends Controller
         //saving the information on to the database
         $newResource = new resource();
 
+        $newResource->user_id = Auth::id();
         $newResource->title = $request->title;
         $newResource->description = $request->description;
         $newResource->category = $request->category;
@@ -395,7 +401,11 @@ class GraphicsDesigningController extends Controller
         Alert::success('Message', 'Selected resource has been deleted successfully');
         return redirect()->back();
     }
+    public function post()
+    {
 
+        return view('admin.departments.graphics-design.graphics-messages');
+    }
     //messages from website under cyber department
     public function graphicsMessages()
     {
@@ -465,36 +475,4 @@ class GraphicsDesigningController extends Controller
         // Return a response to display the PDF in the browser
         return response()->file($filePath);
     }
-
-    // public function searchByRegNumber(Request $request)
-    // {
-    //     $request->validate([
-    //         'registration_number' => 'required'
-    //     ], [
-    //         'registration_number' => 'please enter a valid registration number to start search'
-    //     ]);
-
-    //     $searchNumber = $request->input('registration_number');
-
-    //     // Perform the search using Eloquent ORM
-    //     // $user = User::where('registration_number', $searchNumber)->first();
-    //     $user = User::where('registration_number', $searchNumber)
-    //         ->where('usertype', '!=', 'admin')
-    //         ->where('category', '=', 'cyber security')
-    //         ->select('id', 'registration_number', 'fullname', 'course', 'category', 'email', 'created_at')->first();
-    //     $totalResults = User::where('registration_number', $searchNumber)->select('id', 'registration_number', 'fullname', 'course', 'category', 'email', 'created_at')->count();
-
-    //     // Check if a user with the given registration number exists
-    //     if ($user) {
-    //         // Return the user as JSON response
-    //         // return response()->json($user);
-
-    //         return view('admin.departments.search-result', compact('user', 'totalResults'));
-    //     } else {
-    //         // Return an error message if no user found
-    //         // return response()->json(['error' => 'User not found'], 404);
-    //         Alert::error('Ooops!', "Member records does not exist in our cyber security department database.")->autoClose('6000');
-    //         return redirect()->back();
-    //     }
-    // }
 }

@@ -16,4 +16,9 @@ class resource extends Model
         'file',
         'thumbnail'
     ];
+    public function user()
+    {
+
+        return $this->belongsTo(User::class);
+    }
 }

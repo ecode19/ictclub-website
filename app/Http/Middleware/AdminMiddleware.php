@@ -61,10 +61,13 @@ class AdminMiddleware
                 } else {
                     Auth::logout();
                     // If the user is not an admin or does not meet the requirements, redirect with an error message
-                    Alert::error('Access Denied', 'You have been logged out. This page is restricted to authorized personnel only.');
+                    Alert::error('Access Denied', 'You have been logged out. This page is restricted to authorized personnel only.')->autoClose('7000');
                     return redirect('/login');
                 }
             }
+        }else {
+            Alert::error('Access denied', 'This page is restricted to authorized personnel only');
+            return redirect()->back();
         }
     }
 }

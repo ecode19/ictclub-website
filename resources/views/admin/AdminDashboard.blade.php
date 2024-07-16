@@ -1,9 +1,6 @@
 @extends('layouts.admin')
-
-{{-- <script src="{{ asset('jquery/js/jquery-3.5.1.js') }}"></script> --}}
-
 @section('content')
-
+<div class="container">
     <div class="row">
         <div class="col-12 col-md-6 col-lg-3 mt-2">
             <div class="DashboardCard shadow hv">
@@ -16,7 +13,7 @@
                         {{-- <div class="fs-4 fw-bold">{{ $allMembers }}</div> --}}
                         <p class="">Registered Member</p>
                         <hr>
-                        <a href=""><button class="btn btn-warning">View</button></a>
+                        <a href="{{ route('member_list') }}"><button class="btn btn-warning">View</button></a>
                     </div>
 
                 </div>
@@ -33,7 +30,7 @@
                         </div>
                         <p class="">Active Members</p>
                         <hr>
-                        <a href=""><button class="btn btn-warning">View</button></a>
+                        <a href="{{ route('active.member.list') }}"><button class="btn btn-warning">View</button></a>
                     </div>
                 </div>
             </div>
@@ -49,7 +46,7 @@
                         </div>
                         <p class="">Departments</p>
                         <hr>
-                        <a href=""><button class="btn btn-warning">View</button></a>
+                        <a href="{{ route('departments') }}"><button class="btn btn-warning">View</button></a>
                     </div>
                 </div>
             </div>
@@ -65,17 +62,17 @@
                         </div>
                         <p class="">Inactive Members</p>
                         <hr>
-                        <a href=""><button class="btn btn-warning">View</button></a>
+                        <a href="{{ route('inactive.member.list') }}"><button class="btn btn-warning">View</button></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+</div>
     <form method="post" class="mt-5">
         <a href="member_list.php" class="text-decoration-none fw-bold text-dark">Member list</a>
         <table id="myTable"
-            class="yajra-datatable table table-primary table-hover table-striped table-responsive table-bordered">
+            class="table table-primary table-hover table-striped table-responsive table-bordered">
             <thead>
                 <tr>
                     <th>RegNo</th>
@@ -113,17 +110,8 @@
                 @else
                     <p class="text-danger fw-bold">CURRENTLY NO RECORDS FOUND</p>
                 @endif
-
             </tbody>
         </table>
     </form>
     </div>
 @endsection
-{{-- <form method="POST"
-                                        action="{{ route('cyber-security.member.destroy', [$cyberSecurityMember->id]) }}"
-                                        enctype="multipart/form-data" class="delete-form d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm delete-button"><i
-                                                class="fa fa-trash-alt" aria-hidden="true"></i></button>
-                                    </form> --}}

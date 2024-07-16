@@ -6,17 +6,22 @@ use Imagick;
 use DataTables;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Dompdf\Image\ImageLoader;
 use App\Models\User;
 use App\Models\admin;
 use App\Models\event;
 use App\Models\Comment;
+use App\Models\Payment;
 use App\Models\resource;
 use App\Models\department;
-use Illuminate\Cache\RateLimiting\Limit;
+use App\Models\Team_member;
 use Illuminate\Http\Request;
+use Dompdf\Image\ImageLoader;
+use App\Models\Registration_number;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use App\Rules\UniqueRegistrationNumber;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Cache\RateLimiting\Limit;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AdminController extends Controller
@@ -26,7 +31,13 @@ class AdminController extends Controller
         $authenticatedUser = Auth::User();
         $users = User::all();
         $departments = department::all();
-        return view('admin/assign-admin', compact('users', 'departments', 'authenticatedUser'));
+        $admins = Admin::with('department')->get();
+        return view('admin/assign-admin', compact(
+            'users',
+            'departments',
+            'authenticatedUser',
+            'admins'
+        ));
     }
 
     public function assignAdmin(Request $request)
@@ -88,12 +99,6 @@ class AdminController extends Controller
         ));
     }
 
-    // yajra datatables functionalities not completed
-    // public function getAllUsers(){
-
-    //     return Datatables::of(user::query())->make(true);
-    // }
-
     public function post()
     {
 
@@ -129,7 +134,7 @@ class AdminController extends Controller
 
         return redirect(route('AdminDashboard'))->with('message', 'Member Successfully Registered');
     }
-    //deleting cyber security member
+    //deleting member
     public function memberDestroy($id)
     {
 
@@ -139,6 +144,60 @@ class AdminController extends Controller
         Alert::success('Message', 'Member delete successfully');
         return redirect()->back();
     }
+    public function activeMemberList()
+    {
+
+        $activeMembers = User::where('payment_status', 'active')
+        ->where('usertype', '!=', 'admin')
+        ->get();
+        return view('admin.active-members', compact('activeMembers'));
+    }
+    public function inactiveMemberList()
+    {
+
+        $inactiveMembers = User::where('payment_status', 'inactive')
+        ->where('usertype', '!=', 'admin')
+        ->get();
+        return view('admin.inactive-members', compact('inactiveMembers'));
+    }
+    //registering registration numbers
+    public function registerNumbers()
+    {
+        $totalNumbers = registration_number::all()
+            ->count();
+        return view('admin.registration-numbers', compact('totalNumbers'));
+    }
+    //here department registers member registration before member sign up.
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'registration_numbers.*' => ['required', 'string', 'max:255', new UniqueRegistrationNumber],
+        ]);
+
+        $existingNumbers = []; // Array to store existing registration numbers
+        $errors = []; // Array to store error messages
+
+        foreach ($validatedData['registration_numbers'] as $registrationNumber) {
+            // Check if registration number already exists
+            if (Registration_number::where('registration_number', $registrationNumber)->exists()) {
+                $errors[] = "Registration number '$registrationNumber' already exists.";
+                $existingNumbers[] = $registrationNumber; // Optional: Store existing numbers for user feedback
+            } else {
+                // Store the registration number in the database if it's unique
+                Registration_number::create(['registration_number' => $registrationNumber]);
+            }
+        }
+
+        if (count($errors) > 0) {
+            // Handle errors: display them or redirect with error message
+            Alert::error('error', 'Some entered have been exluded as they already exist in our records.')->autoClose('8000');
+            return redirect()->back()->withErrors($errors); // Flash error messages to the session
+        } else {
+            Alert::success('Success', 'Registration numbers stored successfully.');
+            return redirect()->back();
+        }
+    }
+
     //messages from website
     public function comments()
     {
@@ -160,7 +219,10 @@ class AdminController extends Controller
     public function Repository()
     {
 
-        $resources = Resource::latest()->Limit(3)->get();
+        $resources = Resource::latest()
+        ->with('user')
+        ->Limit(3)
+        ->get();
         return view('admin/resource_repository', compact('resources'));
     }
 
@@ -226,6 +288,7 @@ class AdminController extends Controller
         //saving the information on to the database
         $newResource = new resource();
 
+        $newResource->user_id = Auth::id();
         $newResource->title = $request->title;
         $newResource->description = $request->description;
         $newResource->category = $request->category;
@@ -235,7 +298,7 @@ class AdminController extends Controller
 
         $newResource->save();
 
-        Alert::success('Ujumbe', 'Mchakato Umefanikiwa');
+        Alert::success('Message', 'Resource Posted Successfully');
         return redirect()->back();
     }
     public function destroy($id)
@@ -274,63 +337,6 @@ class AdminController extends Controller
         // Return a response to display the PDF in the browser
         return response()->file($filePath);
     }
-
-    // reserved function for previewing first page of the uploaded pdf as
-
-    // public function documentPreview($fileName)
-    // {
-    //     $document = Resource::where('file_path', $fileName)->first();
-
-    //     if (!$document) {
-    //         Alert::error('Message', 'Something went wrong');
-    //         return redirect()->back();
-    //     }
-
-    //     $filePath = storage_path('app/public/uploads/pdfs/' . $fileName);
-
-    //     if (!file_exists($filePath)) {
-    //         Alert::error('Message', 'Document does not exist in our server');
-    //         return redirect()->back();
-    //     }
-
-    //   // Generate a preview image of the first page of the PDF
-    // $previewPath = storage_path('app/public/uploads/pdfs/' . $fileName . '.png');
-    // if (!file_exists($previewPath)) {
-    //     $imagick = new Imagick();
-    //     $imagick->setResolution(300, 300); // Set the resolution (e.g., 300 DPI)
-    //     $imagick->readImage($filePath . '[0]'); // [0] to extract the first page
-    //     $imagick->setImageFormat('png');
-    //     $imagick->setImageCompressionQuality(100); // Set the compression quality (100 for maximum quality)
-    //     $imagick->writeImage($previewPath);
-    //     $imagick->clear();
-    //     $imagick->destroy();
-    //     }
-
-    //     // Return a response to display the preview image in the browser
-    //     return response()->file($previewPath);
-    // }
-
-
-    // public function documentPreview($fileName)
-    // {
-    //     // Find the PDF record by file name
-    //     $pdf = resource::where('file_path', $fileName)->first();
-
-    //     if (!$pdf) {
-    //         return response()->json(['error' => 'PDF not found'], 404);
-    //     }
-
-    //     // Get the storage path for the PDF file
-    //     $filePath = storage_path('app/public/' . $pdf->file_path);
-
-    //     // Check if the file exists
-    //     if (!file_exists($filePath)) {
-    //         return response()->json(['error' => 'PDF file not found'], 404);
-    //     }
-
-    //     // Return a response to display the PDF in the browser
-    //     return response()->file($filePath);
-    // }
 
     public function memberList()
     {
@@ -437,8 +443,185 @@ class AdminController extends Controller
     }
     public function financialPanel()
     {
-        return view('admin.financial');
+        $users = user::where('usertype', '!=', 'admin')->get();
+        $payments = payment::with('user')->get();
+        return view('admin.financial', compact('payments', 'users'));
     }
+    public function addMemberPaymentDetails(Request $request)
+    {
+
+        $request->validate([
+            'user_id' => ['required', 'unique:payments,user_id'],
+            'date_paid' => ['required'],
+            'expiration_date' => ['required'],
+        ], [
+            'user_id.required' => 'Please Select user',
+            'user_id.unique' => 'This Member has payment records. Please re-check and confirm',
+            'date_paid' => 'Please select a valid date of the payment',
+            'expiration_date' => 'Please enter the date of expirataion'
+        ]);
+
+        $user = User::find($request->user_id); //finding a user by id
+
+        $newPayment = new payment();
+        $newPayment->user_id = $request->user_id;
+        $newPayment->payment_status = 'active';
+        $newPayment->date_paid = $request->date_paid;
+        $newPayment->expiration_date = $request->expiration_date;
+        $newPayment->amount = '2000';
+
+        //directly updating usertype in users table
+        $user->payment_status = 'active';
+        $user->save();
+        //saving other payment details
+        $newPayment->save();
+        Alert::success('Message', 'Payment Information successfully added');
+        return redirect()->back();
+    }
+    //updating member payment informations
+    public function changePaymentInfoView($id)
+    {
+
+        $payments = payment::findOrFail($id);
+        return view('admin.update-user-financial-details', compact('payments'));
+    }
+    public function changePaymentExpirationDate(Request $request)
+    {
+
+        $request->validate([
+            'date_paid' => ['required'],
+            'expiration_date' => ['required']
+        ]);
+
+        $newExpirationDate = new payment();
+
+        //checking if user have payment records
+        // if(exists->$newExpirtaionDate->user_id)
+
+        $newExpirationDate->user_id = $request->user_id;
+        $newExpirationDate->payment_status = 'active';
+        $newExpirationDate->date_paid = $request->date_paid;
+        $newExpirationDate->expiration_date = $request->expiration_date;
+        $newExpirationDate->amount = '2000';
+
+        //saving
+        $newExpirationDate->save();
+        Alert::success('Message', 'Successfully updated');
+        return redirect()->back();
+    }
+    //managing website routes
+    public function teamMember()
+    {
+
+        $teamMembers = team_member::all();
+        return view('admin/team-member', compact('teamMembers'));
+    }
+    //team members function
+    public function addTeamMember(Request $request)
+    {
+
+        $request->validate([
+            'name' => ['required', 'string',  'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            'professionalism' => ['string', 'max:70'],
+            'email' => ['required', 'email', 'unique:team_members'],
+            'x' => ['nullable', 'url'],
+            'whatsApp' => ['nullable', 'url'],
+            'facebook' => ['nullable', 'url'],
+            'profile_image' => ['required', 'mimes: jpg,png', 'max:1024'],
+        ], [
+            'name.required' => 'Team member name is required',
+            'name.max' => 'Team member name too long',
+            'title.required' => 'Team member title is required',
+            'title.max' => 'Team member title too long',
+            'x.url' => 'Please enter a valid url',
+            'whatsApp.url' => 'Please enter a valid url',
+            'facebook.url' => 'Please enter a valid url',
+            'profile_iamge.required' => 'Please select profile required',
+            'profile_image.mime' => 'You can only upload .jpg or .pgn file',
+            'profile_image.max' => 'Image to upload should not exceed 1MB',
+        ]);
+
+        $newTeamMember = new team_member();
+        //profile image proccessing
+        if ($request->hasFile('profile_image')) {
+            $profileImage = $request->file('profile_image');
+            $profileImageName = time() . '_' . $profileImage->getClientOriginalName();
+            $profileImage->move(public_path('images/profilePictures'), $profileImageName);
+
+            $newTeamMember->profile_image = $profileImageName;
+        }
+
+        $newTeamMember->name = $request->name;
+        $newTeamMember->title = $request->title;
+        $newTeamMember->professionalism = $request->professionalism;
+        $newTeamMember->email = $request->email;
+        $newTeamMember->x = $request->x;
+        $newTeamMember->whatsApp = $request->whatsApp;
+        $newTeamMember->facebook = $request->facebook;
+
+        $newTeamMember->save();
+        Alert::success('Message', 'Successfully Added');
+        return redirect()->back();
+    }
+    public function editTeamMember($id){
+
+        $member = team_member::findOrFail($id);
+        return view('admin.edit-team-member', compact('member'));
+    }
+    public function updateTeamMember(Request $request, $id){
+
+        $updateTeamMember = team_member::findOrFail($id);
+
+        $request->validate([
+            'name' => ['required', 'string',  'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            'professionalism' => ['string', 'max:100'],
+            'email' => ['required', 'email'],
+            'x' => ['nullable', 'url'],
+            'whatsApp' => ['nullable', 'url'],
+            'facebook' => ['nullable', 'url'],
+            'profile_image' => ['mimes: jpg,png', 'max:1024'],
+        ], [
+            'name.required' => 'Team member name is required',
+            'name.max' => 'Team member name too long',
+            'title.max' => 'Team member title too long',
+            'x.url' => 'Please enter a valid url',
+            'whatsApp.url' => 'Please enter a valid url',
+            'facebook.url' => 'Please enter a valid url',
+            'profile_iamge.required' => 'Please select profile required',
+            'profile_image.mime' => 'You can only upload .jpg or .pgn file',
+            'profile_image.max' => 'Image to upload should not exceed 1MB',
+        ]);
+
+        if($request->hasFile('profile_image')){
+            $profileImage = $request->file('profile_image');
+            $profileImageName = time() . '_' . $profileImage->getClientOriginalName();
+            $profileImage->move(public_path('images/profilePictures'), $profileImageName);
+
+            //checking and deleting the existing profile image
+            $existingProfileImage = public_path('images/profilePictures' . DIRECTORY_SEPARATOR . $updateTeamMember->profile_image);
+            if(File::exists($existingProfileImage)){
+                File::delete($existingProfileImage);
+            }
+            $updateTeamMember->profile_image = $profileImageName;
+        }
+
+        //saving other details
+
+        $updateTeamMember->name = $request->name;
+        $updateTeamMember->title = $request->title;
+        $updateTeamMember->professionalism = $request->professionalism;
+        $updateTeamMember->email = $request->email;
+        $updateTeamMember->x = $request->x;
+        $updateTeamMember->whatsApp = $request->whatsApp;
+        $updateTeamMember->facebook = $request->facebook;
+
+        $updateTeamMember->update();
+        Alert::success('Message', 'Successfully updated');
+        return redirect()->back();
+    }
+    //document related routes
     public function allRegisteredMembersPDF()
     {
         $users = User::all();
@@ -490,9 +673,9 @@ class AdminController extends Controller
 
         // Add watermark as image
         $canvas = $pdf->getCanvas();
-        $imagePath = public_path('img/mwecau.png'); // Adjust path to your watermark image
+        $imagePath = public_path('img/logo.png'); // Adjust path to your watermark image
         $imgWidth = 200; // Adjust the width of the watermark
-        $imgHeight = 200; // Adjust the height of the watermark
+        $imgHeight = 230; // Adjust the height of the watermark
         $canvas->set_opacity(0.3, "Multiply"); // Set the opacity of the watermark
         $x = ($canvas->get_width() - $imgWidth) / 2;
         $y = ($canvas->get_height() - $imgHeight) / 2;
@@ -500,5 +683,434 @@ class AdminController extends Controller
 
         // Output the generated PDF file
         return $pdf->stream('Mwecau ICT Club Registered Members.pdf');
+    }
+    public function activeMembers()
+    {
+        $activeMembers = User::where('payment_status', 'active')->get();
+        $totalNumber = User::where('payment_status', 'active')->count();
+        $currentDateTime = now()->format('Y-m-d');
+        $authenticatedUser = Auth::user()->fullname;
+
+        $htmlContent = '<h3 style="text-align: center;">ICT CLUB active Members</h3>';
+        $htmlContent .= '<table border="1" style="border-collapse: collapse; width: 100%; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;">';
+        $htmlContent .= '<thead style="background-color: gray; color: white;">';
+        $htmlContent .= '<tr>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">S/N</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Name</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Registration Number</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Status</th>';
+        $htmlContent .= '</tr>';
+        $htmlContent .= '</thead>';
+        $htmlContent .= '<tbody>';
+
+        $counter = 1;
+        foreach ($activeMembers as $activeMember) {
+            $htmlContent .= '<tr>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $counter++ . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $activeMember->fullname . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $activeMember->registration_number . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px color: #ddd;">' . $activeMember->payment_status . '</td>';
+            $htmlContent .= '</tr>';
+        }
+
+        $htmlContent .= '</tbody>';
+        $htmlContent .= '</table>';
+
+        // Add text below the table
+        $htmlContent .= '<p><strong>Total: </strong> </strong>' . $totalNumber . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px; margin-top: 10px;">Printed on: ' . $currentDateTime . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px;">Printed by: ' . $authenticatedUser . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-weight: bold; margin-top: 20px;">Mwecau ICT Club</p>';
+
+        $pdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $pdf->setOptions($options);
+
+        $pdf->loadHtml($htmlContent);
+
+
+        $pdf->render();
+
+        // Add watermark as image
+        $canvas = $pdf->getCanvas();
+        $imagePath = public_path('img/logo.png'); // Adjust path to your watermark image
+        $imgWidth = 200; // Adjust the width of the watermark
+        $imgHeight = 230; // Adjust the height of the watermark
+        $canvas->set_opacity(0.3, "Multiply"); // Set the opacity of the watermark
+        $x = ($canvas->get_width() - $imgWidth) / 2;
+        $y = ($canvas->get_height() - $imgHeight) / 2;
+        $canvas->image($imagePath, $x, $y, $imgWidth, $imgHeight);
+
+        // Output the generated PDF file
+        return $pdf->stream('ICT Club active members.pdf');
+    }
+    public function inactiveMembers()
+    {
+        $inactiveMembers = User::where('payment_status', 'inactive')->get();
+        $totalNumber = User::where('payment_status', 'inactive')->count();
+        $currentDateTime = now()->format('Y-m-d');
+        $authenticatedUser = Auth::user()->fullname;
+
+        $htmlContent = '<h3 style="text-align: center; color: red;">ICT CLUB inactive Members</h3>';
+        $htmlContent .= '<table border="1" style="border-collapse: collapse; width: 100%; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;">';
+        $htmlContent .= '<thead style="background-color: gray; color: white;">';
+        $htmlContent .= '<tr>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">S/N</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Name</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Registration Number</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px">Status</th>';
+        $htmlContent .= '</tr>';
+        $htmlContent .= '</thead>';
+        $htmlContent .= '<tbody>';
+
+        $counter = 1;
+        foreach ($inactiveMembers as $inactiveMember) {
+            $htmlContent .= '<tr>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $counter++ . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $inactiveMember->fullname . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $inactiveMember->registration_number . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd; color: red;">' . $inactiveMember->payment_status . '</td>';
+            $htmlContent .= '</tr>';
+        }
+
+        $htmlContent .= '</tbody>';
+        $htmlContent .= '</table>';
+
+        // Add text below the table
+        $htmlContent .= '<p><strong>Total: </strong> </strong>' . $totalNumber . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px; margin-top: 10px;">Printed on: ' . $currentDateTime . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px;">Printed by: ' . $authenticatedUser . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-weight: bold; margin-top: 20px;">Mwecau ICT Club</p>';
+
+        $pdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $pdf->setOptions($options);
+
+        $pdf->loadHtml($htmlContent);
+
+
+        $pdf->render();
+
+        // Add watermark as image
+        $canvas = $pdf->getCanvas();
+        $imagePath = public_path('img/logo.png'); // Adjust path to your watermark image
+        $imgWidth = 200; // Adjust the width of the watermark
+        $imgHeight = 230; // Adjust the height of the watermark
+        $canvas->set_opacity(0.3, "Multiply"); // Set the opacity of the watermark
+        $x = ($canvas->get_width() - $imgWidth) / 2;
+        $y = ($canvas->get_height() - $imgHeight) / 2;
+        $canvas->image($imagePath, $x, $y, $imgWidth, $imgHeight);
+
+        // Output the generated PDF file
+        return $pdf->stream('ICT Club inactive members.pdf');
+    }
+    public function departmentList()
+    {
+        $departments = Department::with('admins.user')
+            ->get();
+        $totalNumber = Department::where('dept_name', '!=', 'root')->count();
+        $currentDateTime = now()->format('Y-m-d');
+        $authenticatedUser = Auth::user()->fullname;
+
+        $htmlContent = '<h3 style="text-align: center;">ICT CLUB Departments</h3>';
+        $htmlContent .= '<table border="1" style="border-collapse: collapse; width: 100%; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;">';
+        $htmlContent .= '<thead style="background-color: gray; color: white;">';
+        $htmlContent .= '<tr>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">S/N</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Name</th>';
+        $htmlContent .= '</tr>';
+        $htmlContent .= '</thead>';
+        $htmlContent .= '<tbody>';
+
+        $counter = 1;
+        foreach ($departments as $department) {
+            $htmlContent .= '<tr>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $counter++ . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $department->dept_name . '</td>';
+            $htmlContent .= '</tr>';
+        }
+
+        $htmlContent .= '</tbody>';
+        $htmlContent .= '</table>';
+
+        // Add text below the table
+        $htmlContent .= '<p><strong>Total: </strong> </strong>' . $totalNumber . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px; margin-top: 10px;">Printed on: ' . $currentDateTime . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px;">Printed by: ' . $authenticatedUser . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-weight: bold; margin-top: 20px;">Mwecau ICT Club</p>';
+
+        $pdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $pdf->setOptions($options);
+
+        $pdf->loadHtml($htmlContent);
+
+
+        $pdf->render();
+
+        // Add watermark as image
+        $canvas = $pdf->getCanvas();
+        $imagePath = public_path('img/logo.png'); // path to watermark image
+        $imgWidth = 200; // Adjust the width of the watermark
+        $imgHeight = 230; // Adjust the height of the watermark
+        $canvas->set_opacity(0.3, "Multiply"); // Set the opacity of the watermark
+        $x = ($canvas->get_width() - $imgWidth) / 2;
+        $y = ($canvas->get_height() - $imgHeight) / 2;
+        $canvas->image($imagePath, $x, $y, $imgWidth, $imgHeight);
+
+        // Output the generated PDF file
+        return $pdf->stream('ICT Club Departments.pdf');
+    }
+    public function cyberMembers()
+    {
+        $cyberMembers = User::where('category', 'cyber security')->get();
+        $totalNumber = User::where('category', 'cyber security')->count();
+        $currentDateTime = now()->format('Y-m-d');
+        $authenticatedUser = Auth::user()->fullname;
+
+        $htmlContent = '<h3 style="text-align: center;">ICT Club Cyber Security Members</h3>';
+        $htmlContent .= '<table border="1" style="border-collapse: collapse; width: 100%; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;">';
+        $htmlContent .= '<thead style="background-color: gray; color: white;">';
+        $htmlContent .= '<tr>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">S/N</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Name</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Registration Number</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Date registered</th>';
+        $htmlContent .= '</tr>';
+        $htmlContent .= '</thead>';
+        $htmlContent .= '<tbody>';
+
+        $counter = 1;
+        foreach ($cyberMembers as $cyberMember) {
+            $htmlContent .= '<tr>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $counter++ . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $cyberMember->fullname . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $cyberMember->registration_number . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $cyberMember->created_at->format('Y-m-d') . '</td>';
+            $htmlContent .= '</tr>';
+        }
+
+        $htmlContent .= '</tbody>';
+        $htmlContent .= '</table>';
+
+        // Add text below the table
+        $htmlContent .= '<p><strong>Total: </strong> </strong>' . $totalNumber . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px; margin-top: 10px;">Printed on: ' . $currentDateTime . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px;">Printed by: ' . $authenticatedUser . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-weight: bold; margin-top: 20px;">Mwecau ICT Club</p>';
+
+        $pdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $pdf->setOptions($options);
+
+        $pdf->loadHtml($htmlContent);
+
+
+        $pdf->render();
+
+        // Add watermark as image
+        $canvas = $pdf->getCanvas();
+        $imagePath = public_path('img/logo.png'); // Adjust path to your watermark image
+        $imgWidth = 200; // Adjust the width of the watermark
+        $imgHeight = 230; // Adjust the height of the watermark
+        $canvas->set_opacity(0.3, "Multiply"); // Set the opacity of the watermark
+        $x = ($canvas->get_width() - $imgWidth) / 2;
+        $y = ($canvas->get_height() - $imgHeight) / 2;
+        $canvas->image($imagePath, $x, $y, $imgWidth, $imgHeight);
+
+        // Output the generated PDF file
+        return $pdf->stream('ICT club cyber security members.pdf');
+    }
+    public function programmingMembers()
+    {
+        $programmingMembers = User::where('category', 'programming')->get();
+        $totalNumber = User::where('category', 'programming')->count();
+        $currentDateTime = now()->format('Y-m-d');
+        $authenticatedUser = Auth::user()->fullname;
+
+        $htmlContent = '<h3 style="text-align: center;">ICT Club Programming Members</h3>';
+        $htmlContent .= '<table border="1" style="border-collapse: collapse; width: 100%; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;">';
+        $htmlContent .= '<thead style="background-color: gray; color: white;">';
+        $htmlContent .= '<tr>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">S/N</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Name</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Registration Number</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Date registered</th>';
+        $htmlContent .= '</tr>';
+        $htmlContent .= '</thead>';
+        $htmlContent .= '<tbody>';
+
+        $counter = 1;
+        foreach ($programmingMembers as $programmingMember) {
+            $htmlContent .= '<tr>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $counter++ . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $programmingMember->fullname . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $programmingMember->registration_number . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $programmingMember->created_at->format('Y-m-d') . '</td>';
+            $htmlContent .= '</tr>';
+        }
+
+        $htmlContent .= '</tbody>';
+        $htmlContent .= '</table>';
+
+        // Add text below the table
+        $htmlContent .= '<p><strong>Total: </strong> </strong>' . $totalNumber . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px; margin-top: 10px;">Printed on: ' . $currentDateTime . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px;">Printed by: ' . $authenticatedUser . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-weight: bold; margin-top: 20px;">Mwecau ICT Club</p>';
+
+        $pdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $pdf->setOptions($options);
+
+        $pdf->loadHtml($htmlContent);
+
+
+        $pdf->render();
+
+        // Add watermark as image
+        $canvas = $pdf->getCanvas();
+        $imagePath = public_path('img/logo.png'); // Adjust path to your watermark image
+        $imgWidth = 200; // Adjust the width of the watermark
+        $imgHeight = 230; // Adjust the height of the watermark
+        $canvas->set_opacity(0.3, "Multiply"); // Set the opacity of the watermark
+        $x = ($canvas->get_width() - $imgWidth) / 2;
+        $y = ($canvas->get_height() - $imgHeight) / 2;
+        $canvas->image($imagePath, $x, $y, $imgWidth, $imgHeight);
+
+        // Output the generated PDF file
+        return $pdf->stream('ICT club programming members.pdf');
+    }
+    public function graphicsMembers()
+    {
+        $graphicsMembers = User::where('category', 'graphics designing')->get();
+        $totalNumber = User::where('category', 'graphics designing')->count();
+        $currentDateTime = now()->format('Y-m-d');
+        $authenticatedUser = Auth::user()->fullname;
+
+        $htmlContent = '<h3 style="text-align: center;">ICT Club Graphics Members</h3>';
+        $htmlContent .= '<table border="1" style="border-collapse: collapse; width: 100%; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;">';
+        $htmlContent .= '<thead style="background-color: gray; color: white;">';
+        $htmlContent .= '<tr>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">S/N</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Name</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Registration Number</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Date registered</th>';
+        $htmlContent .= '</tr>';
+        $htmlContent .= '</thead>';
+        $htmlContent .= '<tbody>';
+
+        $counter = 1;
+        foreach ($graphicsMembers as $graphicsMember) {
+            $htmlContent .= '<tr>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $counter++ . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $graphicsMember->fullname . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $graphicsMember->registration_number . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $graphicsMember->created_at->format('Y-m-d') . '</td>';
+            $htmlContent .= '</tr>';
+        }
+
+        $htmlContent .= '</tbody>';
+        $htmlContent .= '</table>';
+
+        // Add text below the table
+        $htmlContent .= '<p><strong>Total: </strong> </strong>' . $totalNumber . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px; margin-top: 10px;">Printed on: ' . $currentDateTime . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px;">Printed by: ' . $authenticatedUser . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-weight: bold; margin-top: 20px;">Mwecau ICT Club</p>';
+
+        $pdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $pdf->setOptions($options);
+
+        $pdf->loadHtml($htmlContent);
+
+
+        $pdf->render();
+
+        // Add watermark as image
+        $canvas = $pdf->getCanvas();
+        $imagePath = public_path('img/logo.png'); // Adjust path to your watermark image
+        $imgWidth = 200; // Adjust the width of the watermark
+        $imgHeight = 230; // Adjust the height of the watermark
+        $canvas->set_opacity(0.3, "Multiply"); // Set the opacity of the watermark
+        $x = ($canvas->get_width() - $imgWidth) / 2;
+        $y = ($canvas->get_height() - $imgHeight) / 2;
+        $canvas->image($imagePath, $x, $y, $imgWidth, $imgHeight);
+
+        // Output the generated PDF file
+        return $pdf->stream('ICT club graphics members.pdf');
+    }
+    public function verifiedNumbers()
+    {
+        $registrationNumbers = Registration_number::all();
+        $totalNumber = Registration_number::all()->count();
+        $currentDateTime = now()->format('Y-m-d');
+        $authenticatedUser = Auth::user()->fullname;
+
+        $htmlContent = '<h3 style="text-align: center;">All ICT CLUB Vefiried Numbers</h3>';
+        $htmlContent .= '<table border="1" style="border-collapse: collapse; width: 100%; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;">';
+        $htmlContent .= '<thead style="background-color: #033392; color: white;">';
+        $htmlContent .= '<tr>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">S/N</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Registration Number</th>';
+        $htmlContent .= '<th style="padding: 8px; text-align: left; border: 1px ">Date Verified</th>';
+        $htmlContent .= '</tr>';
+        $htmlContent .= '</thead>';
+        $htmlContent .= '<tbody>';
+
+        $counter = 1;
+        foreach ($registrationNumbers as $registrationNumber) {
+            $htmlContent .= '<tr>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $counter++ . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $registrationNumber->registration_number . '</td>';
+            $htmlContent .= '<td style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . $registrationNumber->created_at->format('Y-m-d') . '</td>';
+            $htmlContent .= '</tr>';
+        }
+
+        $htmlContent .= '</tbody>';
+        $htmlContent .= '</table>';
+
+        // Add text below the table
+        $htmlContent .= '<p><strong>Total: </strong> </strong>' . $totalNumber . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px; margin-top: 10px;">Printed on: ' . $currentDateTime . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-size: 12px;">Printed by: ' . $authenticatedUser . '</p>';
+        $htmlContent .= '<p style="text-align: center; font-weight: bold; margin-top: 20px;">Mwecau ICT Club</p>';
+
+        $pdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $pdf->setOptions($options);
+
+        $pdf->loadHtml($htmlContent);
+
+
+        $pdf->render();
+
+        // Add watermark as image
+        $canvas = $pdf->getCanvas();
+        $imagePath = public_path('img/logo.png'); // Adjust path to your watermark image
+        $imgWidth = 200; // Adjust the width of the watermark
+        $imgHeight = 230; // Adjust the height of the watermark
+        $canvas->set_opacity(0.3, "Multiply"); // Set the opacity of the watermark
+        $x = ($canvas->get_width() - $imgWidth) / 2;
+        $y = ($canvas->get_height() - $imgHeight) / 2;
+        $canvas->image($imagePath, $x, $y, $imgWidth, $imgHeight);
+
+        // Output the generated PDF file
+        return $pdf->stream('ICT Club Verified Numbers.pdf');
     }
 }

@@ -15,7 +15,7 @@
             <div class="form-group">
                 <label class="mt-3 mb-3" for="event_name">Event Name:</label>
                 <input type="text" class="form-control @error('event_name') is-invalid @enderror"
-                    value="{{ old('event_name') }}" id="event_name" name="event_name">
+                    value="{{ old('event_name') }}" id="eventName" name="event_name">
 
                 @error('event_name')
                     <span class="invalid-feedback" role="alert">
@@ -37,7 +37,7 @@
 
             <div class="form-group mt-3">
                 <label class="mt-3 mb-3" for="event_description">Event Description</label>
-                <textarea class="form-control @error('event_description') is-invalid @enderror" name="event_description" rows="10">{{ old('event_description') }}</textarea>
+                <textarea class="form-control @error('event_description') is-invalid @enderror" name="event_description" id="eventDesc" rows="10">{{ old('event_description') }}</textarea>
 
                 @error('event_description')
                     <span class="invalid-feedback" role="alert">
@@ -57,7 +57,7 @@
                     </span>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-success btn-sm color mt-3 mb-3"> <i class="fa fa-cloud-upload"
+            <button type="submit" class="btn btn-success btn-sm color mt-3 mb-3" id="postEvent"> <i class="fa fa-cloud-upload"
                     aria-hidden="true"></i> Create Event</button>
         </form>
         <hr>
@@ -103,4 +103,7 @@
             </thead>
         </table>
     </div>
+
+               {{-- Notifications link --}}
+               <script src="{{ route('adminPostEvent') }}"></script>
 @endsection

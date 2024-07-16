@@ -28,6 +28,8 @@
                         </div>
                     </div>
                 @endforeach
+                @else
+                <p class="alert alert-warning mt-5" role="alert">Currently, There is no comments relating to Cyber Security Division.</p>
             @endif
 
 

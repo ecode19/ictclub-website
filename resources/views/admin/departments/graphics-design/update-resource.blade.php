@@ -30,10 +30,10 @@
             <div class="form-group">
                 <label class="mt-2" for="category">Resource Category:</label>
                 <select class="form-select @error('category') is-invalid @enderror" id="category" name="category">
-                    <option value="presentation" {{ $resources->category == 'presentation' ? 'selected' : '' }}>Presentation
+                    <option value="programming" {{ $resources->category == 'programming' ? 'selected' : '' }}>Programming
                     </option>
-                    <option value="document" {{ $resources->category == 'document' ? 'selected' : '' }}>Document</option>
-                    <option value="tutorial" {{ $resources->category == 'tutorial' ? 'selected' : '' }}>Tutorial</option>
+                    <option value="cyber security" {{ $resources->category == 'cyber security' ? 'selected' : '' }}>Cyber security</option>
+                    <option value="graphics designing" {{ $resources->category == 'graphics designing' ? 'selected' : '' }}>Graphics designing</option>
                 </select>
 
                 @error('category')

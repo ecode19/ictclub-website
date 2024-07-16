@@ -1,7 +1,14 @@
 @extends('layouts.user')
 @section('content')
     <div class="container mt-5">
-        <h2 class="text-secondary">Resources Panel</h2>
+        <h2 class="text-secondary post">Resources Panel</h2>
+        <div>
+            <p>Hi, <strong>{{ $authenticatedUser->fullname }}</strong> if you like to receive notifications about new
+                resources under <strong>{{ $authenticatedUser->category }} </strong> you can click the button below.</p>
+        </div>
+        <button class="btn btn-sm" id="userIdBtn" data-id="{{ $authenticatedUser->id }}">
+            </button>
+
         <hr>
         @if ($resources->count() > 0)
             <div class="row">
@@ -20,7 +27,7 @@
                                 </div>
 
                                 <div class="mt-3">
-                                    <small>Posted By: Suleiman Ramadhani</small> <br>
+                                    <small>Posted By: {{ $resource->user->fullname }}</small> <br>
                                     <small class="text-warning">Category: {{ $resource->category }}</small>
                                 </div>
                                 <div class="mt-3">
@@ -36,7 +43,15 @@
             </div>
     </div>
 @else
-    <p class="alert alert-warning shadow-lg" role="alert">CURRENTLY NO RESOURCES POSTED</p>
+    <p class="alert alert-warning shadow-lg" role="alert">Currently no resource under <strong
+            class="text-uppercase">{{ $authenticatedUser->category }}</strong> has been posted.</p>
     @endif
     </div>
+
+    {{-- Notifications link --}}
+    <script src="{{ route('user') }}"></script>
+    {{-- <script src="{{ route('serveWorker') }}"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @endsection

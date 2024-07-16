@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\event;
 use App\Models\Comment;
+use App\Models\Team_member;
 
 class HomeController extends Controller
 {
@@ -25,13 +26,16 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+        $teamMembers = team_member::all();
         $news = event::all();
-        return view('index', compact('news'));
+        return view('index', compact('news', 'teamMembers'));
     }
     public function about()
     {
 
-        return view('about');
+        $teamMembers = team_member::all();
+        return view('about', compact('teamMembers'));
     }
     public function departments()
     {
@@ -70,6 +74,21 @@ class HomeController extends Controller
         toast('Message derived', 'success')->position('bottom-start')->autoClose('6000');
         return redirect()->back();
     }
+    //returns the more Detailed page of a specific event
+    public function showEventDetails($id)
+    {
+        $similarEvents = Event::where('id', '!=', $id)->get(); // Fetch other related events, excluding the current one
+        $showEventDetails = Event::find($id); // Fetch the specific event by ID
+
+        return view('event-details', compact('showEventDetails', 'similarEvents'));
+    }
+
+    public function showInner($id)
+    {
+
+        $innerEvent = Event::find($id);
+        return view('event-details', compact('innerEvent'));
+    }
     public function privacyPolicy()
     {
 
@@ -94,5 +113,20 @@ class HomeController extends Controller
     {
 
         return view('departments.computer-networking');
+    }
+    public function cyberDepartment()
+    {
+
+        return view('departments.cyber-security');
+    }
+    public function maintenanceDepartment()
+    {
+
+        return view('departments.computer-maintenance');
+    }
+    public function webDepartment()
+    {
+
+        return view('departments.web-development');
     }
 }

@@ -16,9 +16,8 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->enum('payment_status', ['active', 'inactive']);
+            $table->enum('payment_status', ['active', 'inactive'])->nullable();
             $table->dateTime('date_paid');
-            $table->string('mode_of_payment');
             $table->decimal('amount', 10, 2);
             $table->timestamps();
 

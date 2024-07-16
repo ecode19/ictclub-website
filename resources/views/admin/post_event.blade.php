@@ -3,17 +3,17 @@
     <div class="container mt-5">
         <h2 class="colorIcon">Event Management</h2>
         <hr>
-        <div class="text-end">
+        {{-- <div class="text-end">
             <a href="{{ route('events') }}" class="text-primary text-decoration-none"> <button class="btn btn-primary">views
                     posted events</button> </a>
-        </div>
+        </div> --}}
         <!-- Event creation form -->
         <form action="{{ route('eventUpload') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label class="mt-3 mb-3" for="event_name">Event Name:</label>
                 <input type="text" class="form-control @error('event_name') is-invalid @enderror"
-                    value="{{ old('event_name') }}" id="event_name" name="event_name">
+                    value="{{ old('event_name') }}" id="eventName" name="event_name">
 
                 @error('event_name')
                     <span class="invalid-feedback" role="alert">
@@ -35,7 +35,7 @@
 
             <div class="form-group mt-3">
                 <label class="mt-3 mb-3" for="event_description">Event Description</label>
-                <textarea class="form-control @error('event_description') is-invalid @enderror" name="event_description" rows="10">{{ old('event_description') }}</textarea>
+                <textarea class="form-control @error('event_description') is-invalid @enderror" id="eventDesc" name="event_description" rows="10">{{ old('event_description') }}</textarea>
 
                 @error('event_description')
                     <span class="invalid-feedback" role="alert">
@@ -55,7 +55,9 @@
                     </span>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-success color mt-3 mb-3"> <i class="fa fa-save" aria-hidden="true"></i> Create Event</button>
+            <button type="submit" class="btn btn-success color mt-3 mb-3" id="postEvent"> <i class="fa fa-save" aria-hidden="true"></i> Create Event</button>
         </form>
     </div>
+           {{-- Notifications link --}}
+           <script src="{{ route('adminPostEvent') }}"></script>
 @endsection

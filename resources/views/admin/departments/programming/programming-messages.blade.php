@@ -30,7 +30,7 @@
             @endif
             @if ($comments->isEmpty())
                 <p class="alert alert-warning shadow-lg">Currently, there is no Message from website relating to
-                    <strong>programming department.</strong>
+                    <strong>programming division.</strong>
                 </p>
             @endif
         </div>

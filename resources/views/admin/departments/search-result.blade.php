@@ -1,43 +1,31 @@
 @extends('layouts.programming')
 @section('content')
-    <div class="container">
-        <div class="text-white">
-            <div class="" aria-labelledby="dropdownMenuButton">
-                <h6 class="">User Details</h6>
-                Registration Number: {{ $user->registration_number }} <br>
-                Full Name: {{ $user->fullname }} <br>
-                Course: {{ $user->course }} <br>
-                Category: {{ $user->category }} <br>
-                Email: {{ $user->email }} <br>
-                Created At: {{ $user->created_at }}
+    <div class="container mt-5">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-lg" style="background: linear-gradient(to top, #1b1f15, #9ec73f) ">
+                <div class="card-body">
+                    @if ($user->profile_picture)
+                        <div class="text-center mb-4"> <img
+                                src="{{ asset('images/profilePictures/' . $user->profile_picture) }}"
+                                class="img-fluid rounded-circle w-50 " alt=""
+                                style="background-color: rgb(107, 107, 252)">
+                        </div>
+                    @else
+                        <div class="text-center mb-4"> <img src="{{ asset('img/logo.png/') }}"
+                                class="img-fluid rounded-circle w-50 " alt="">
+                        </div>
+                    @endif
+
+                    <div class="text-right">
+                        <span class="fs-4">Fullname: <strong>{{ $user->fullname }}</strong></span> <br>
+                        <span class="fs-6">Registration Number: <strong>{{ $user->registration_number }}</strong></span>
+                        <br>
+                        <span class="fs-4">Course: <strong>{{ $user->course }}</strong></span> <br>
+                        <span class="fs-5">Division: <strong>{{ $user->category }} </strong></span><br>
+                        <span class="fs-6">Date Registered: <i class="fa fa-registered" aria-hidden="true"></i>
+                            <strong>{{ $user->created_at }} </span><br>
+                    </div></strong>
+                </div>
             </div>
         </div>
-
-        <div class="mt-4">
-            <button class="btn btn-success ">Message</button>
-            <button class="btn btn-warning ">Update</button>
-            <button class="btn btn-danger ">Delete</button>
-        </div>
-
-        <h1 class="text-warning mt-4">Total found: <strong>{{ $totalResults }}</strong></h1>
-    </div>
-@endsection
-
-// Processing file
-if ($request->hasFile('file')) {
-    $file = $request->file('file');
-    $fileName = time() . "_" . $file->getClientOriginalName();
-
-    // Storing the uploaded file in storage/app/public/uploads/pdfs
-    $filePath = 'public/uploads/pdfs/' . $fileName;
-    $file->storeAs('public/uploads/pdfs', $fileName);
-
-    // Check for existing file and delete it
-    $existingFilePath = 'public/uploads/pdfs/' . $user->file;
-    if (Storage::exists($existingFilePath)) {
-        Storage::delete($existingFilePath);
-    }
-
-    // Update user file
-    $user->file = $fileName;
-}
+    @endsection

@@ -13,6 +13,7 @@
                                     class="img-fluid mt-auto" alt="Profile Picture"
                                     style="height:130px;">
                                 <div class="card-text text-dark">{{ $resource->description }}</div>
+                                <p class="mt-3 fw-bold text-dark">Posted By: {{ $resource->user->fullname }}</p>
                                 <div class="mt-3 d-flex">
 
                                     <a href="{{ route('programming.resource.preview', $resource->file_name) }}" target="_blank">

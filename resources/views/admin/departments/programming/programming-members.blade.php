@@ -6,7 +6,7 @@
             <a href="{{ route('programming.register.member') }}">
                 <button class="btn btn-primary btn-sm fw-bold"> <i class="fa fa-plus fw-bold" aria-hidden="true"></i>
                     Add</button>
-            </a>
+            </a> N
         </div>
         <div class="text-center mb-3 ">
             <button class="activeMembersBtn departmentBtn w-25">active Members</button>

@@ -89,7 +89,7 @@
     <div class="container">
         <div class="row g-0">
             <div class="col-md py-5 p-5 text-center" data-aos="fade-right" data-aos-duration="2000">
-                <img src="../img/logo.jpg" class="img-fluid image-border rounded-circle w-50 mt-5" alt="club">
+                <img src="../img/logo.png" class="img-fluid image-border rounded-circle w-50 mt-5" alt="club">
             </div>
             <div class="col-md py-lg-5 py-sm-0">
                 <form action="{{ route('login') }}" method="post" autocomplete="off">
@@ -104,7 +104,7 @@
                     @endif
 
                     <!--input for Registration Number-->
-                    <div class="form-outline mt-4 col-lg-9" data-aos="zoom-in-right">
+                    <div class="form-outline mt-4 col-lg-9">
                         <label class="form-label text-light" for="registration number">REGISTRATION
                             NUMBER</label>
                         <input type="text" name="registration_number" placeholder="Enter valid Registration number"
@@ -120,7 +120,7 @@
                     </div>
 
                     <!--input for password-->
-                    <div class="form-outline mt-4 col-lg-9" data-aos="zoom-in-left">
+                    <div class="form-outline mt-4 col-lg-9">
                         <label class="form-label text-light" for="Email">PASSWORD</label>
                         <input type="password" name="password" placeholder="Type your password"
                             class="form-control @error('password') is-invalid @enderror">
@@ -145,8 +145,8 @@
                     </div>
                     <!--Login button-->
                     <div class="pt-4">
-                        <button type="submit" name="login" class="btn btn-primary btn-lg" data-aos="fade-right"
-                            data-aos-duration="1000">Login</button>
+                        <button type="submit" name="login" class="btn btn-primary btn-lg"
+                            target="_blank">Login</button>
                         <p class="small text-light fw-bold mt-2 pt-1 mb-0">Don't have an account <a
                                 href="{{ route('register') }}"
                                 class="text-danger mx-2 text-decoration-none">Register</a></p>

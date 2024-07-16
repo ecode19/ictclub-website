@@ -51,7 +51,10 @@
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">coding</span>
                         </button>
+
                         <ul class="dropdown-menu">
+                            <li class="dropdown-item"><a href="{{ url('/') }}">
+                                    Go back to website</a></li>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
@@ -79,6 +82,9 @@
         </div>
     </div>
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.js') }}"></script>
+
+
+
 </body>
 
 </html>

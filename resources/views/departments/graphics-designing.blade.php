@@ -11,7 +11,7 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="">
+                    <div class="text-light">
                         <p align="justify" class="lh-lg fs-6">
                             <span class="text-primary fs-4">Graphics designing class.</span> Is a learning program that
                             focuses on teaching students how to create visual designs using various digital tools and

@@ -4,7 +4,7 @@
         <div class="container">
             <h1 class="text-primary text-center">Mwecau ICT Club Members </h1>
             <a href="{{ route('admin.register.member') }}"><button class="btn btn-primary btn-sm mx-5 mt-3 mb-4 text-sm-end"> <i class="fa fa-user-plus" aria-hidden="true"></i> Add New</button></a>
-            <table id="memberTable"
+            <table id="myTable"
                 class=" shadow-lg table table-secondary table-hover table-bordered table-striped table-center">
                 <thead>
                     <tr class="fw-bold">
@@ -46,6 +46,10 @@
                     @endif
                 </tbody>
             </table>
+            <div class="mt-3">
+                 <a class="btn btn-secondary mb-5" href="{{ route('all.registered.members') }}">Print</a>
+            </div>
+
         </div>
 
     <script>

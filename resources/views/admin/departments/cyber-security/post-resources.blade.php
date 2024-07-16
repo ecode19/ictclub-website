@@ -8,7 +8,7 @@
             <div class="form-group">
                 <label class="mt-2" for="title">Resource Name:</label>
                 <input type="text" value="{{ old('title') }}" class="form-control @error('title') is-invalid @enderror"
-                    id="resource_name" name="title">
+                    id="resourceTitle" name="title">
                 @error('title')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -28,10 +28,10 @@
 
             <div class="form-group">
                 <label class="mt-2" for="category">Resource Category:</label>
-                <select class="form-select @error('category') is-invalid @enderror" id="category" name="category">
-                    <option value="presentation">Presentation</option>
-                    <option value="document">Document</option>
-                    <option value="tutorial">Tutorial</option>
+                <select class="form-control @error('category') is-invalid @enderror" id="department" name="category">
+                    <option value="cyber security">Cyber Security</option>
+                    <option value="programming">Programming</option>
+                    <option value="graphics designing">graphics designing</option>
                 </select>
 
                 @error('category')
@@ -64,7 +64,7 @@
                     </span>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-primary btn-sm mb-3 mt-3"> <i class="fa fa-upload" aria-hidden="true"></i>
+            <button type="submit" class="btn btn-primary btn-sm mb-3 mt-3" id="submitBtn"> <i class="fa fa-upload" aria-hidden="true"></i>
                 Upload Resource</button>
         </form>
         @if ($resources->count() > 0)
@@ -78,6 +78,7 @@
                                     class="img-fluid w-100 mt-auto" alt="Profile Picture"
                                     style="height:130px; border-radius: 5px;">
                                 <div class="card-text text-dark">{{ $resource->description }}</div>
+                                <p class="mt-3 fw-bold text-dark">Posted By: {{ $resource->user->fullname }}</p>
                                 <div class="mt-3 d-flex">
 
                                     <a href="{{ route('cyber-security.resource.preview', $resource->file_name) }}" target="_blank">
@@ -179,4 +180,7 @@
         //     });
         // });
     </script>
+
+       {{-- Notifications link --}}
+       <script src="{{ route('admin') }}"></script>
 @endsection

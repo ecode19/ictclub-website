@@ -28,7 +28,7 @@
                             <h2>Active member</h2>
                             <h3 class="fw-bold">{{ $activeMembers }}</h3>
                             <hr>
-                            <a href=""><button class="fw-bold departmentBtn">View</button></a>
+                            <a href="#active" data-bs-toggle="modal"><button class="fw-bold departmentBtn">View</button></a>
                         </div>
 
                     </div>
@@ -67,7 +67,7 @@
                     </div>
                 </div>
 
-                <table class="table table-success table-bordered table-hover table-striped table-responsive ">
+                <table id="myTable" class="table table-success table-bordered table-hover table-striped table-responsive">
                     <thead>
                         <tr>
                             <th>S/N</th>
@@ -112,12 +112,43 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        @foreach ($inactiveMembers as $inactiveMember)
-                            <h6 class="">{{ $inactiveMember->registration_number }}</h6>
-                        @endforeach
+                        @if (count($inactiveMembers) > 0)
+                            @foreach ($inactiveMembers as $inactiveMember)
+                                <h6 class="">{{ $inactiveMember->registration_number }}</h6>
+                            @endforeach
+                        @else
+                            <p class="alert alert-success" role="alert">Currently, All Members are active.</p>
+                        @endif
+
                     </div>
                     <div class="modal-footer">
-                        {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button> --}}
+                        <a href="" class="btn btn-secondary">Print</a>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--active members Modal HTML -->
+        <div id="active" class="modal fade">
+            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" style="background: #0b1810">
+                <div class="modal-content" style="background: #0b1810">
+                    <div class="modal-header">
+                        <h5 class="modal-title">All active members under cyber security department</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if (count($activeMember) > 0)
+                            @foreach ($activeMember as $activeMember)
+                                <h6 class="">{{ $activeMember->registration_number }}</h6>
+                            @endforeach
+                        @else
+                            <p class="alert alert-warning" role="alert">Currently, All members are inactive.</p>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <a href="" class="btn btn-secondary">Print</a>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

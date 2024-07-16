@@ -61,5 +61,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Payment::class);
     }
-
+    //relationship betwee user and resources table
+    public function resource()
+    {
+        return $this->hasMany(resource::class);
+    }
 }

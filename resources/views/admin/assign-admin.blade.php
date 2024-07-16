@@ -18,7 +18,7 @@
     </style>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-6 mt-5">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="text-center">Assign Admin</h3>
@@ -70,8 +70,40 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 mt-5">
                 <h3>Manage Admins</h3>
+                <table class="table table-success table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Full Name</th>
+                            <th>Department</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $counter = 1;
+                        @endphp
+                        @foreach($admins as $admin)
+                            <tr>
+                                <td>{{ $counter++ }}</td>
+                                <td>{{ $admin->user->fullname }}</td>
+                                <td>{{ $admin->department->dept_name }}</td>
+                                <td>
+                                    <form method="POST"
+                                    action="{{ route('delete.admin', [$admin->id]) }}"
+                                    enctype="multipart/form-data" class="delete-form d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm delete-button"><i
+                                            class="fa fa-trash-alt" aria-hidden="true"></i></button>
+                                </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

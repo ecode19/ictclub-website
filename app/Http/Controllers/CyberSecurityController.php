@@ -33,7 +33,11 @@ class CyberSecurityController extends Controller
             ->where('usertype', '!=', 'root')
             ->where('id', '!=', $authenticatedUser->id)
             ->count();
-
+        //fetching all active members under cyber department department
+        $activeMember = user::where('payment_status', 'active')
+            ->where('category', 'cyber security')
+            ->where('id', '!=', $authenticatedUser->id)
+            ->get();
         //fetching all inactive members under cyber department department
         $inactiveMembers = user::where('payment_status', 'inactive')
             ->where('category', 'cyber security')
@@ -46,7 +50,19 @@ class CyberSecurityController extends Controller
 
         $totalRescources = resource::all()->count();
 
-        return view('admin.departments.cyber-security.dashboard', compact('authenticatedUser', 'totalCyberSecurityMembers', 'activeMembers', 'inactiveMembers', 'totalinactiveMembers', 'cyberSecurityMembers', 'totalRescources'));
+        return view(
+            'admin.departments.cyber-security.dashboard',
+            compact(
+                'authenticatedUser',
+                'totalCyberSecurityMembers',
+                'activeMembers',
+                'inactiveMembers',
+                'totalinactiveMembers',
+                'cyberSecurityMembers',
+                'totalRescources',
+                'activeMember',
+            )
+        );
     }
     //registering cyber security member
     public function register()
@@ -193,13 +209,15 @@ class CyberSecurityController extends Controller
     //returning view for posting resources
     public function resources()
     {
-        $resources = resource::all()->take('2');
+        $resources = resource::with('user')
+        ->take('2')
+        ->get();
         return view('admin.departments.cyber-security.post-resources', compact('resources'));
     }
     //this function retruns the list of all resources under cyber security department
     public function cyberResources()
     {
-        $cyberResources = resource::all();
+        $cyberResources = Resource::with('user')->get();
         return view('admin.departments.cyber-security.cyber-resources', compact('cyberResources'));
     }
     //posting graphics resources
@@ -242,6 +260,7 @@ class CyberSecurityController extends Controller
         //saving the information on to the database
         $newResource = new resource();
 
+        $newResource->user_id = Auth::id();
         $newResource->title = $request->title;
         $newResource->description = $request->description;
         $newResource->category = $request->category;
@@ -355,11 +374,10 @@ class CyberSecurityController extends Controller
     public function searchByRegNumber(Request $request)
     {
         $request->validate([
-            'registration_number' => 'required'
-        ], [
-            'registration_number' => 'please enter a valid registration number to start search'
+            'registration_number' => ['required']
+        ],[
+            'registration_number.required' => 'Please Enter Valid Registration number to start search'
         ]);
-
         $searchNumber = $request->input('registration_number');
 
         // Perform the search using Eloquent ORM
@@ -379,7 +397,7 @@ class CyberSecurityController extends Controller
         } else {
             // Return an error message if no user found
             // return response()->json(['error' => 'User not found'], 404);
-            Alert::error('Ooops!', "Member records does not exist in our cyber security department database.")->autoClose('6000');
+            Alert::error('Attention', "Member records does not exist in our database.")->autoClose('7000');
             return redirect()->back();
         }
     }

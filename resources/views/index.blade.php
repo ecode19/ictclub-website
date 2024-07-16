@@ -309,9 +309,6 @@
                 <!-- News and Feeds Section -->
                 <div class="card">
                     <h2 class="text-center fs-2 colorIcon">News and Feeds</h2>
-                    {{-- <div class="card-header fw-bold  colorIcon fs-5">
-                        News and Feeds
-                    </div> --}}
                     <div id="card-container" class="card-body border-news"
                         style="max-height: 400px; overflow-y: scroll;">
                         @if ($news->count() > 0)
@@ -322,8 +319,8 @@
                                     <h6 class="card-subtitle mb-2 text-muted">{{ $news->event_date }}</h6>
                                     <p class="card-text">{{ $news->event_description }}</p>
                                     <div class="card-footer">
-                                        <a href="{{ route('about.page'), $news->id }}" target="_blank"
-                                            class="btn btn-warning">Read
+                                        <a href="{{ route('event.details', $news->id) }}"
+                                            class="btn btn-warning mb-3">Read
                                             More</a>
                                     </div>
                                 </div> <br>
@@ -337,10 +334,59 @@
 
     <!--team-->
     <section>
-        <div class="container">
+        <div class="container mt-5">
             <h2 class="text-center colorIcon">MEET THE TEAM</h2>
             <div class="row">
                 <div class="team-slider">
+                    @foreach ($teamMembers as $member)
+                        <div class="col-12 col-md-4 col-lg-3">
+                            <div class="team-card  text-center">
+                                @if ($member->profile_image)
+                                    <div class="team-member-img">
+                                        <img src="{{ asset('images/profilePictures/' . $member->profile_image) }}"
+                                            class="shadow-lg mb-4 img-fluid rounded mx-auto" alt="{{ $member->name }}">
+                                    </div>
+                                    @else
+                                    <div class="team-member-img">
+                                        <img src="{{ asset('../public/img/logo.png') }}"
+                                            class="shadow-lg mb-4 img-fluid rounded mx-auto" alt="{{ $member->name }}">
+                                    </div>
+                                @endif
+                                <div class="card-body text-center">
+                                    <div class="fw-bold">{{ $member->name }}</div>
+                                    <div class="text-info fst-italic  mb-3">{{ $member->title }}</div>
+                                    <p class="">{{ $member->professionalism }}</p>
+                                    <div class="social-icons">
+                                        @if ($member->x)
+                                            <a href="{{ $member->x }}"><i class="fab fa-twitter fs-4"></i></a>
+                                        @else
+                                            <a href="#"><i class="fab fa-twitter fs-4"></i></a>
+                                        @endif
+                                        @if ($member->whatsApp)
+                                            <a href="{{ $member->whatsApp }}"><i
+                                                    class="fab fa-whatsapp mx-1 fs-4"></i></a>
+                                        @else
+                                            <a href="#"><i class="fab fa-whatsapp mx-1 fs-4"></i></a>
+                                        @endif
+                                        @if ($member->email)
+                                            <a href="mailto:{{ $member->email }}"><i
+                                                    class="fab fa-google mx-1 fs-4"></i></a>
+                                        @else
+                                            <a href="#"><i class="fab fa-google mx-1 fs-4"></i></a>
+                                        @endif
+                                        @if ($member->facebook)
+                                            <a href="{{ $member->facebook }}"><i
+                                                    class="fab fa-facebook-f mx-1 fs-4"></i></a>
+                                        @else
+                                            <a href="#"><i class="fab fa-facebook-f mx-1 fs-4"></i></a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                {{-- <div class="team-slider">
                     <div class="col-md-4">
                         <div class="team-card text-center">
                             <div class="team-member-img mb-4 "><img src="./img/ecode.png"
@@ -350,7 +396,7 @@
                             <p class="">Passionate about creating intuitive user experiences that
                                 inspire.</p>
 
-                            <button class="btn btn-outline-warning mb-4">Contact</button>
+                            <button class="btn btn-warning mb-4">Contact</button>
                             <div class="social-icons">
                                 <a href="#"><i class="fab fa-facebook fs-4"></i></a>
                                 <a href="#"><i class="fab fa-twitter fs-4"></i></a>
@@ -359,67 +405,8 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-md-4">
-                        <div class="team-card text-center">
-                            <div class="team-member-img"><img src="./img/suleiman.jpg"
-                                    class=" shadow-lg img-fluid rounded-circle mx-auto" alt="Developer"></div>
-                            <div class="fw-bold">Suleiman Ramadhan</div>
-                            <div class="text-info fst-italic mb-3">HOD Programming</div>
-                            <p class="">Passionate about crafting elegant solutions and pushing the boundaries of
-                                technology to create seamless user experiences.</p>
-
-
-                            <button class="btn btn-outline-warning mb-4">Contact</button>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-facebook fs-4"></i></a>
-                                <a href="#"><i class="fab fa-twitter fs-4"></i></a>
-                                <a href="#"><i class="fab fa-linkedin fs-4"></i></a>
-                                <a href="#"><i class="fab fa-instagram fs-4"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="team-card text-center">
-                            <div class="team-member-img"><img src="./img/mwecau.png"
-                                    class=" shadow-lg img-fluid rounded-circle mx-auto" alt="Developer"></div>
-                            <div class="fw-bold">Erick Manyasi</div>
-                            <div class="text-info fst-italic mb-3">UI/UX Designer</div>
-                            <p class="">Passionate about creating intuitive user experiences that
-                                inspire.</p>
-
-                            <button class="btn btn-outline-warning mb-4">Contact</button>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-facebook fs-4"></i></a>
-                                <a href="#"><i class="fab fa-twitter fs-4"></i></a>
-                                <a href="#"><i class="fab fa-linkedin fs-4"></i></a>
-                                <a href="#"><i class="fab fa-instagram fs-4"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="team-card text-center">
-                            <div class="team-member-img"><img src="./img/mwecau.png"
-                                    class=" shadow-lg img-fluid rounded-circle mx-auto" alt="Developer"></div>
-                            <div class="fw-bold">Erick Manyasi</div>
-                            <div class="text-info fst-italic mb-3">UI/UX Designer</div>
-                            <p class="">Passionate about creating intuitive user experiences that
-                                inspire.</p>
-
-                            <button class="btn btn-outline-warning mb-4">Contact</button>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-facebook fs-4"></i></a>
-                                <a href="#"><i class="fab fa-twitter fs-4"></i></a>
-                                <a href="#"><i class="fab fa-linkedin fs-4"></i></a>
-                                <a href="#"><i class="fab fa-instagram fs-4"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div> --}}
             </div>
-        </div>
     </section> <br>
 
     <!--Event Start-->
@@ -451,12 +438,4 @@
         </div>
     </section>
     <!--End Events-->
-
-    <div class="container">
-        <h2 class="text-center mb-4"></h2>
-        <div class="row">
-
-            <!-- Repeat the above card structure for other team members -->
-        </div>
-    </div>
 @endsection
